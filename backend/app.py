@@ -11,13 +11,6 @@ def index():
     return render_template('index.html')
 
 
-@app.route('/api/users', methods=['POST'])
-def create_user():
-    data = request.json
-    new_user = User(username=data['username'])
-    db.session.add(new_user)
-    db.session.commit()
-    return jsonify({'message': 'User created!'}), 201
 
 
 
