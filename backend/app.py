@@ -10,6 +10,14 @@ app = create_app()
 def index():
     return render_template('index.html')
 
+@app.route('/signup', methods=['GET'])
+def sign_up():
+    return render_template('sign-up.html')
+
+@app.route('/choose', methods=['GET'])
+def log_in():
+    return render_template('choose.html')
+
 
 
 
