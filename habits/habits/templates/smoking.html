@@ -1,0 +1,174 @@
+{% extends "base.html" %}
+{% block title %}Smoking{% endblock %}
+{% block style %}
+<style>
+    body {
+      font-family: "Crimson Text", serif;
+    }
+    .custom-checkbox {
+  appearance: none;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 2px solid #716e74;
+  outline: none;
+  cursor: pointer;
+  position: relative;
+  transition: background-color 0.5s, border-color 0.3s;
+}
+
+.custom-checkbox:checked {
+  background-color: orange;
+  border-color: orange;
+}
+
+.custom-checkbox:checked::after {
+  content: '';
+  display: block;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.custom-label {
+  display: flex;
+  align-items: center;
+  margin-left: 10px;
+}
+
+  </style>
+  {% endblock style %}
+  {% block content %}
+    <div class="screen bg-gradient-to-b from-[#DDD8DF] to-[#787579] h-screen">
+      <div
+        class="container-inside flex flex-col items-between justify-between pt-16 mx-8"
+      >
+        <div div class="header flex items-center justify-between">
+          <div class="back-image text-4xl">
+            <a href="habits"
+              ><img class="w-3" src="back.png" alt="back-button"
+            /></a>
+          </div>
+          <div class="title text-4xl text-center font-semibold">SMOKING</div>
+          <div class="nik"></div>
+        </div>
+
+        <div
+          class="middle flex flex-col items-center justify-center mt-24 relative"
+        >
+          <svg viewBox="0 0 100 100" class="absolute top-auto left-auto h-96 w-96">
+            <defs>
+              <radialGradient
+                id="gradient"
+                cx="60%"
+                cy="50%"
+                r="60%"
+                fx="50%"
+                fy="50%"
+              >
+                <stop
+                  offset="0%"
+                  style="stop-color: #ca4d25; stop-opacity: 1"
+                />
+                <stop
+                  offset="50%"
+                  style="stop-color: #ff7a50; stop-opacity: 1"
+                />
+                <stop
+                  offset="100%"
+                  style="stop-color: #c9c1c9; stop-opacity: 1"
+                />
+              </radialGradient>
+            </defs>
+            <circle
+              cx="50"
+              cy="50"
+              r="47"
+              stroke="url(#gradient)"
+              stroke-width="4"
+              stroke-dasharray="1.2, 1.3"
+              fill="none"
+            />
+          </svg>
+
+          <div
+            class="circle color-white w-60 h-60 bg-[#DFE2E3] flex items-center justify-center rounded-full border-solid border-4 border-[#F3E2D5] relative"
+          >
+            <div class="cont flex flex-col items-center justify-center">
+              <div class="top text-6xl" style="font-family: Jost">56</div>
+              <div
+                class="bottom text-2xl text-[#7F8187] tracking-[0.2rem]"
+                style="font-family: Jost"
+              >
+                DAYS
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="days flex items-center justify-center gap-0.5 mt-20">
+        <div
+          class="day flex flex-col items-center justify-center text-[#533F39] rounded-full bg-[#E7A581] w-14 h-14 gap-0"
+        >
+          <div class="day of the week uppercase">mon</div>
+          <div class="numbe mt-[-8px]">9</div>
+        </div>
+        <div
+          class="day flex flex-col items-center justify-center text-[#533F39] rounded-full w-14 h-14 gap-0"
+        >
+          <div class="day of the week uppercase">mon</div>
+          <div class="numbe mt-[-8px]">9</div>
+        </div>
+        <div
+          class="day flex flex-col items-center justify-center text-[#533F39] rounded-full w-14 h-14 gap-0"
+        >
+          <div class="day of the week uppercase">mon</div>
+          <div class="numbe mt-[-8px]">9</div>
+        </div>
+        <div
+          class="day flex flex-col items-center justify-center text-[#533F39] rounded-full w-14 h-14 gap-0"
+        >
+          <div class="day of the week uppercase">mon</div>
+          <div class="numbe mt-[-8px]">9</div>
+        </div>
+        <div
+          class="day flex flex-col items-center justify-center text-[#533F39] rounded-full w-14 h-14 gap-0"
+        >
+          <div class="day of the week uppercase">mon</div>
+          <div class="numbe mt-[-8px]">9</div>
+        </div>
+        <div
+          class="day flex flex-col items-center justify-center text-[#533F39] rounded-full w-14 h-14 gap-0"
+        >
+          <div class="day of the week uppercase">mon</div>
+          <div class="numbe mt-[-8px]">9</div>
+        </div>
+        <div
+          class="day flex flex-col items-center justify-center text-[#533F39] rounded-full w-14 h-14 gap-0"
+        >
+          <div class="day of the week uppercase">mon</div>
+          <div class="numbe mt-[-8px]">9</div>
+        </div>
+      </div>
+      <div class="tasks mt-6 gap-2 flex flex-col items-center justify-center mx-4">
+        <div class="task bg-white rounded-2xl flex justify-between px-8 py-5 items-center w-full text-[#716e74] text-[18px]" style="font-family: Jost">
+  <input type="checkbox" id="task-checkbox1" class="custom-checkbox" />
+  <label for="task-checkbox1" class="custom-label cursor-pointer">Reduce the number of drinks by 20%</label>
+</div>
+
+        <div class="task bg-white rounded-2xl flex justify-between px-8 py-5 items-center w-full text-[#716e74] text-[18px]" style="font-family: Jost">
+  <input type="checkbox" id="task-checkbox2" class="custom-checkbox" />
+  <label for="task-checkbox2" class="custom-label cursor-pointer">Reduce the number of drinks by 20%</label>
+</div>
+        <div class="task bg-white rounded-2xl flex justify-between px-8 py-5 items-center w-full text-[#716e74] text-[18px]" style="font-family: Jost">
+  <input type="checkbox" id="task-checkbox3" class="custom-checkbox" />
+  <label for="task-checkbox3x" class="custom-label cursor-pointer">Reduce the number of drinks by 20%</label>
+</div>
+      </div>
+    </div>
+{% endblock content %}

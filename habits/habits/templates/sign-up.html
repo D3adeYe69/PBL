@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+{% block title %}Sign-in{% endblock %}
+{% block content %}
+<div class="screen bg-gradient-to-t from-pink-300 to-white h-screen">
+    <div class="bot-container flex flex-col justify-end items-center h-screen pb-[40%] gap-7">
+        <div class="titles mb-4 text-center">
+            <div class="title text-[#c22165] text-6xl mb-3 font-bold">
+                Welcome
+            </div>
+            <div class="subtitle text-[#c94a80] text-2xl mb-4 font-bold">
+                Start the Adventure
+            </div>
+        </div>
+        <form method="POST" class="inputs flex flex-col items-center justify-center gap-2">
+            {% csrf_token %}
+            <div class="input">
+                <input
+                    id="username"
+                    name="username"
+                    type="text"
+                    placeholder="User"
+                    value="{{ form.username.value|default:'' }}"
+                    class="bg-[#fec6ee] text-[#c22165] focus:placeholder-transparent focus:border-pink-600 focus:outline-none text-xl font-bold placeholder-[#c22165] px-5 py-2 text-center rounded-md border border-pink-400"
+                    required
+                />
+                <div class="text-red-500 text-sm">
+                    {{ form.username.errors }}
+                </div>
+            </div>
+            <div class="input">
+                <input
+                    id="email"
+                    name="email"
+                    type="email"
+                    placeholder="Email"
+                    value="{{ form.email.value|default:'' }}"
+                    class="bg-[#fec6ee] text-[#c22165] text-xl focus:outline-none focus:border-pink-600 focus:placeholder-transparent placeholder-[#c22165] px-5 py-2 text-center font-bold border border-pink-400 rounded-md"
+                    required
+                />
+                <div class="text-red-500 text-sm">
+                    {{ form.email.errors }}
+                </div>
+            </div>
+            <div class="input">
+                <input
+                    id="password"
+                    name="password"
+                    type="password"
+                    placeholder="Password"
+                    class="bg-[#fec6ee] text-[#c22165] focus:placeholder-transparent focus:border-pink-600 focus:outline-none text-xl font-bold placeholder-[#c22165] px-5 py-2 text-center rounded-md border border-pink-400"
+                    required
+                />
+                <div class="text-red-500 text-sm">
+                    {{ form.password.errors }}
+                </div>
+            </div>
+            <div class="input">
+                <input
+                    id="confirmPassword"
+                    name="confirm_password"
+                    type="password"
+                    placeholder="Confirm Password"
+                    class="bg-[#fec6ee] text-[#c22165] focus:placeholder-transparent focus:border-pink-600 focus:outline-none text-xl font-bold placeholder-[#c22165] px-5 py-2 text-center rounded-md border border-pink-400"
+                    required
+                />
+                <div class="text-red-500 text-sm">
+                    {{ form.confirm_password.errors }}
+                </div>
+            </div>
+
+            <button
+                type="submit"
+                class="button bg-[#c22165] mt-2 inline-flex text-xl justify-center items-center px-14 py-1.5 rounded-md cursor-pointer opacity-100"
+            >
+                <span class="text-[#fec6ee]">Sign up</span>
+            </button>
+
+            <div id="generalError" class="text-red-500 text-sm mt-2 text-center">
+                {% if form.non_field_errors %}
+                    {{ form.non_field_errors }}
+                {% endif %}
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock content %}
