@@ -78,16 +78,10 @@ WSGI_APPLICATION = 'habits.wsgi.application'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
 DATABASES = {
-    DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'pbl21',  # Name of your MySQL database
-        'USER': 'root',     # Your MySQL username
-        'PASSWORD': '', # Your MySQL password
-        'HOST': '127.0.0.1',           # Database host (usually localhost)
-        'PORT': '3306',                # MySQL port (default is 3306)
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
-}
 }
 
 
