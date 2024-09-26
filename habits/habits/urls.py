@@ -23,9 +23,9 @@ from django.conf.urls.static import static
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('',views.index),
-    path('sign-up', views.sign_up),
-    path('habits', views.habits),
-    path('smoking', views.smoking)
+    path('sign-up', views.sign_up, name = 'sign-up'),
+    path('habits', views.habits, name = 'habits'),
+    path('habit/<int:id>/', views.habit )
     
 ]
 

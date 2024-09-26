@@ -10,34 +10,18 @@
             <div class="title text-[#fec6ee] text-4xl text-bold mt-8 mb-3">
               Buffs
             </div>
+            
             <div
               class="habits flex flex-col text-xl font-semibold justify-center items-center gap-3 w-[100%]"
-            >
-              <div
-                class="habit text-[#C22165] bg-gradient-to-r py-3 w-[100%] text-center rounded-md from-[#FEC6EE] to-[#F076CD]"
-              >
-                <a href="">Reading</a>
-              </div>
-              <div
-                class="habit text-[#C22165] bg-gradient-to-r py-3 w-[100%] text-center rounded-md from-[#fdc9ed] to-[#e4f6d2]"
-              >
-                <a href="">Savings</a>
-              </div>
-              <div
-                class="habit text-[#C22165] bg-gradient-to-r w-[100%] text-center py-3 rounded-md from-[#f7c7ed] to-[#8fcade]"
-              >
-                <a href="">Gym</a>
-              </div>
-              <div
-                class="habit text-[#C22165] bg-gradient-to-r py-3 w-[100%] text-center rounded-md from-[#fdc4e8] to-[#e4aa81]"
-              >
-                <a href="">Nutrition</a>
-              </div>
+            >{% for habit in habits %}
+        {% if habit.habit_type == "Good" or habit.habit_type == "good"  %}
               <div
                 class="habit text-[#C22165] bg-gradient-to-r py-3 w-[100%] text-center rounded-md from-[#fec2e9] to-[#ff6263]"
               >
-                <a href="">Breakfasting</a>
+              <a href="/habit/{{habit.habit_id}}">{{habit.habit_name}}</a>
               </div>
+              {% endif %}
+              {% endfor %}
             </div>
           </div>
 
@@ -48,37 +32,21 @@
             <div
               class="habits flex flex-col text-xl font-semibold justify-center items-center gap-3 text-[#FEC6EE] w-full"
             >
+            {% for habit in habits %}
+            {% if habit.habit_type == "Bad" or habit.habit_type == "bad"  %}
               <div
                 class="habit bg-gradient-to-r py-3 w-[100%] text-center rounded-md from-[#c32563] to-[#ce623c]"
               >
-                <a href="smoking">Smoking</a>
-              </div>
-              <div
-                class="habit bg-gradient-to-r py-3 w-[100%] text-center rounded-md from-[#b92264] to-[#22264c]"
-              >
-                <a href="">Underslept</a>
-              </div>
-              <div
-                class="habit bg-gradient-to-r py-3 w-[100%] text-center rounded-md from-[#bf2164] to-[#291f23]"
-              >
-                <a href="">Alcohol</a>
-              </div>
-              <div
-                class="habit bg-gradient-to-r py-3 w-[100%] text-center rounded-md from-[#bf205c] to-[#bf205c]"
-              >
-                <a href="">Overeating</a>
-              </div>
-              <div
-                class="habit bg-gradient-to-r py-3 w-[100%] text-center rounded-md from-[#ba2764] to-[#317c58]"
-              >
-                <a href="">Procrastination</a>
-              </div>
+                <a href="/habit/{{habit.habit_id}}">{{habit.habit_name}}</a>
+              </div> 
+              {% endif %}
+              {% endfor %}
             </div>
           </div>
         </div>
-        <div class="logout w-full flex items-center justify-start mt-10">
+        <div class="logout w-full flex items-center justify-starts mt-10">
           <a href="/"
-            ><img src="{% static '/images/back.png' %}" alt="logout" class="w-5"
+            ><img src="{% static '/images/logout.png' %}" alt="logout" class="w-5"
           /></a>
         </div>
       </div>

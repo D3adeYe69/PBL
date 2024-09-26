@@ -1,6 +1,7 @@
 {% extends "base.html" %}
-{% block title %}Smoking{% endblock %}
+{% block title %}{{habit.habit_name}}{% endblock %}
 {% block style %}
+{% load static %}
 <style>
     body {
       font-family: "Crimson Text", serif;
@@ -50,11 +51,11 @@
       >
         <div div class="header flex items-center justify-between">
           <div class="back-image text-4xl">
-            <a href="habits"
-              ><img class="w-3" src="back.png" alt="back-button"
+            <a href={% url  'habits' %}>
+            <img class="w-3" src="{% static '/images/back.png' %}" alt="back-button"
             /></a>
           </div>
-          <div class="title text-4xl text-center font-semibold">SMOKING</div>
+          <div class="title text-4xl text-center font-semibold">{{ habit.habit_name }} </div>
           <div class="nik"></div>
         </div>
 
@@ -112,48 +113,25 @@
         </div>
       </div>
       <div class="days flex items-center justify-center gap-0.5 mt-20">
+
+        {% for day, day_name in days_week %}
+
+        {% if day == today %} 
         <div
           class="day flex flex-col items-center justify-center text-[#533F39] rounded-full bg-[#E7A581] w-14 h-14 gap-0"
         >
-          <div class="day of the week uppercase">mon</div>
-          <div class="numbe mt-[-8px]">9</div>
-        </div>
+          <div class="day of the week uppercase">{{ day_name }}</div>
+          <div class="numbe mt-[-8px]">{{day.day}}</div>
+        </div>  
+        {% else %}
         <div
           class="day flex flex-col items-center justify-center text-[#533F39] rounded-full w-14 h-14 gap-0"
         >
-          <div class="day of the week uppercase">mon</div>
-          <div class="numbe mt-[-8px]">9</div>
+          <div class="day of the week uppercase">{{ day_name }}</div>
+          <div class="numbe mt-[-8px]">{{day.day}}</div>
         </div>
-        <div
-          class="day flex flex-col items-center justify-center text-[#533F39] rounded-full w-14 h-14 gap-0"
-        >
-          <div class="day of the week uppercase">mon</div>
-          <div class="numbe mt-[-8px]">9</div>
-        </div>
-        <div
-          class="day flex flex-col items-center justify-center text-[#533F39] rounded-full w-14 h-14 gap-0"
-        >
-          <div class="day of the week uppercase">mon</div>
-          <div class="numbe mt-[-8px]">9</div>
-        </div>
-        <div
-          class="day flex flex-col items-center justify-center text-[#533F39] rounded-full w-14 h-14 gap-0"
-        >
-          <div class="day of the week uppercase">mon</div>
-          <div class="numbe mt-[-8px]">9</div>
-        </div>
-        <div
-          class="day flex flex-col items-center justify-center text-[#533F39] rounded-full w-14 h-14 gap-0"
-        >
-          <div class="day of the week uppercase">mon</div>
-          <div class="numbe mt-[-8px]">9</div>
-        </div>
-        <div
-          class="day flex flex-col items-center justify-center text-[#533F39] rounded-full w-14 h-14 gap-0"
-        >
-          <div class="day of the week uppercase">mon</div>
-          <div class="numbe mt-[-8px]">9</div>
-        </div>
+        {% endif %} 
+        {% endfor %}
       </div>
       <div class="tasks mt-6 gap-2 flex flex-col items-center justify-center mx-4">
         <div class="task bg-white rounded-2xl flex justify-between px-8 py-5 items-center w-full text-[#716e74] text-[18px]" style="font-family: Jost">

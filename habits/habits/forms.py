@@ -52,7 +52,5 @@ class UserLoginForm(forms.Form):
             print(user.password)
             if not check_password(password,user.password):
                 raise forms.ValidationError("Incorrect password.")
-            
-        
         return password
     

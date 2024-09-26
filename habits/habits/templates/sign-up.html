@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% block title %}Sign-in{% endblock %}
 {% block content %}
+{% load static %}
 <div class="screen bg-gradient-to-t from-pink-300 to-white h-screen">
     <div class="bot-container flex flex-col justify-end items-center h-screen pb-[40%] gap-7">
         <div class="titles mb-4 text-center">
@@ -81,6 +82,12 @@
                 {% endif %}
             </div>
         </form>
+        <div class="logout w-full flex items-center justify-starts mt-10 ml-32">
+            <a href="/"
+              ><img src="{% static '/images/back.png' %}" alt="logout" class="w-5"
+            /></a>
+          </div>
     </div>
 </div>
+
 {% endblock content %}
