@@ -7,6 +7,8 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 from .models import Habit, Step, HabStep,UserTask,UserProgress
+from datetime import *
+from django.utils import timezone
 
 def index(request):
     context = {}
@@ -51,7 +53,7 @@ def habit(request, id):
     user_id = request.session.get('user_id')
     if not user_id:
         return redirect('login')
-
+    
     user = get_object_or_404(User, user_id=user_id)
     habit = get_object_or_404(Habit, habit_id=id)
 
@@ -66,27 +68,39 @@ def habit(request, id):
 
     steps_for_today = HabStep.objects.filter(habit=habit, step_order=user_progress.current_day)
 
+   
+    current_time = timezone.now()
+    print(current_time.hour+2)
+    if current_time.hour+2 == 24 and current_time.minute == 25:
+        user_progress.check_all_tasks_completed() 
+
     if request.method == 'POST':
+
         for step in steps_for_today:
             step_id = request.POST.get(f'step_{step.id}')
+
             user_task, created = UserTask.objects.get_or_create(
                 user_progress=user_progress,
                 task_description=step.step.description
             )
 
-            if step_id == 'on':
+            if step_id == 'on':  
                 user_task.task_completed = True
-            else:
+            elif step_id == 'off':  
                 user_task.task_completed = False
 
             user_task.save()
 
-        user_progress.check_all_tasks_completed()
 
-    today = datetime.today()
+            print(f"task description: {user_task.task_description} task completed: {user_task.task_completed}")
+
+       
+
+    steps_for_today = HabStep.objects.filter(habit=habit, step_order=user_progress.current_day)
+    today = timezone.now()
     start = today - timedelta(days=today.weekday())
     days_week = [(start + timedelta(days=i), ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"][i]) for i in range(7)]
-
+   
     return render(request, "smoking.html", {
         "habit": habit,
         "days_week": days_week,
