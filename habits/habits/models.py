@@ -72,6 +72,7 @@ class UserProgress(models.Model):
     last_updated = models.DateTimeField(auto_now=True)
 
     def reset_tasks_for_next_day(self):
+        
         self.current_day += 1
         self.completed_tasks_today = 0
         self.save()
