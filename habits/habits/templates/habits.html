@@ -15,9 +15,17 @@
               class="habits flex flex-col text-xl font-semibold justify-center items-center gap-3 w-[100%]"
             >{% for habit in habits %}
         {% if habit.habit_type == "Good" or habit.habit_type == "good"  %}
+     
               <div
-                class="habit text-[#C22165] bg-gradient-to-r py-3 w-[100%] text-center rounded-md from-[#fec2e9] to-[#ff6263]"
+                class="px-6 habit  text-[#C22165] flex gap-6 items-center justify-start bg-gradient-to-r py-3 w-[100%] text-center rounded-md from-[{{habit.gradient_color_start}}] to-[{{habit.gradient_color_end}}]"
               >
+
+              <div class="checkbox flex items-center justify-center">
+                <label class="relative flex items-center justify-center cursor-pointer">
+                  <input type="checkbox" id="{{habit.habit_id}}" name="check" class="appearance-none bg-[#F5DADA] rounded-full w-6 h-6 cursor-pointer peer">
+                  <span class="absolute inset-[-3] flex items-center justify-center text-white opacity-0 peer-checked:opacity-100">✔</span>
+                </label>              
+              </div>
               <a href="/habit/{{habit.habit_id}}">{{habit.habit_name}}</a>
               </div>
               {% endif %}
@@ -26,7 +34,7 @@
           </div>
 
           <div class="category flex flex-col justify-end items-center">
-            <div class="title text-[#c22165] text-4xl text-bold mb-3">
+            <div class="title text-[#c22165] text-4xl text-bold mt-8 mb-3">
               Debuffs
             </div>
             <div
@@ -34,21 +42,50 @@
             >
             {% for habit in habits %}
             {% if habit.habit_type == "Bad" or habit.habit_type == "bad"  %}
-              <div
-                class="habit bg-gradient-to-r py-3 w-[100%] text-center rounded-md from-[#c32563] to-[#ce623c]"
-              >
-                <a href="/habit/{{habit.habit_id}}">{{habit.habit_name}}</a>
-              </div> 
+            <div
+            class="px-6 habit  text-[#FEC6EE] flex gap-6 items-center justify-start bg-gradient-to-r py-3 w-[100%] text-center rounded-md from-[{{habit.gradient_color_start}}] to-[{{habit.gradient_color_end}}]"
+          >
+
+          <div class="checkbox flex items-center justify-center">
+            <label class="relative flex items-center justify-center cursor-pointer">
+              <input type="checkbox" id="{{habit.habit_id}}" name="check" class="appearance-none bg-[#F5DADA] rounded-full w-6 h-6 cursor-pointer peer">
+              <span class="absolute inset-[-3] flex items-center justify-center text-white opacity-0 peer-checked:opacity-100">✔</span>
+            </label>              
+          </div>
+          <a href="/habit/{{habit.habit_id}}">{{habit.habit_name}}</a>
+          </div> 
               {% endif %}
               {% endfor %}
             </div>
           </div>
         </div>
-        <div class="logout w-full flex items-center justify-starts mt-10">
-          <a href="/"
-            ><img src="{% static '/images/logout.png' %}" alt="logout" class="w-5"
-          /></a>
-        </div>
+      </div>
+      <div class="navbar flex items-center py-3 justify-around bg-white w-full fixed bottom-0 shadow-lg rounded-t-xl">
+
+        <a  href="" class="item flex flex-col items-center justify-center">
+          <div class="img"><img src="{% static '/images/home.svg' %}" alt=""></div>
+          <div class="text-item text-opacity-75">Home</div>
+        </a>
+        <a href="" class="block item flex flex-col items-center justify-center">
+
+          <div class="img"><img src="{% static '/images/account.svg' %}" alt=""></div>
+          <div class="text-item text-opacity-75">Notifications</div>
+        </a>
+        <a href="" class="block item flex flex-col items-center justify-center">
+
+          <div class="img"><img src="{% static '/images/settings.svg' %}" alt=""></div>
+          <div class="text-item text-opacity-75">Settings</div>
+
+        <a href="" class="block item flex flex-col items-center justify-center">
+          <div class="img"><img src="{% static '/images/notifications.svg' %}" alt=""></div>
+          <div class="text-item text-opacity-75">Account</div></a>
+
+      </div>
+      <div class="logout w-full flex items-center justify-starts mt-10">
+        <a href="/"
+          ><img src="{% static '/images/logout.png' %}" alt="logout" class="w-5"
+        /></a>
       </div>
     </div>
+
 {% endblock content %}

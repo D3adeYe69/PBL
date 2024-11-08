@@ -14,6 +14,11 @@ from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+# settings.py
+
+# Optionally configure session settings
+SESSION_ENGINE = 'django.contrib.sessions.backends.db'  # Use database-backed sessions
+# You can also use other engines like `cached_db`, `redis`, etc.
 
 
 # Quick-start development settings - unsuitable for production
@@ -114,6 +119,9 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 
 USE_TZ = True
+
+# settings.py
+SESSION_COOKIE_AGE = 3600  # 1 hour session timeout
 
 
 # Static files (CSS, JavaScript, Images)

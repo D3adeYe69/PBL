@@ -23,6 +23,8 @@ class Habit(models.Model):
     habit_name = models.CharField(max_length=100)
     habit_type = models.CharField(max_length=4, choices=[('good', 'Good'), ('bad', 'Bad')])
     description = models.TextField(blank=True)
+    gradient_color_start = models.CharField(max_length=7, blank=True, help_text="Hex code for the gradient start color")
+    gradient_color_end = models.CharField(max_length=7, blank=True, help_text="Hex code for the gradient end color")
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
@@ -30,6 +32,15 @@ class Habit(models.Model):
 
     def __str__(self):
         return self.habit_name
+
+    def save(self, *args, **kwargs):
+        if self.habit_type == 'good' and not self.gradient_color_start and not self.gradient_color_end:
+            self.gradient_color_start = '#FEC6EE'  # Pink gradient start
+            self.gradient_color_end = '#F076CD'    # Pink gradient end
+        elif self.habit_type == 'bad' and not self.gradient_color_start and not self.gradient_color_end:
+            self.gradient_color_start = '#C22165'  # Red gradient start
+            self.gradient_color_end = '#19274A'    # Blue gradient end
+        super(Habit, self).save(*args, **kwargs)
 
 class Step(models.Model):
     step_id = models.AutoField(primary_key=True)
@@ -49,19 +60,47 @@ class HabStep(models.Model):
     step_order = models.IntegerField()
     created_at = models.DateTimeField(auto_now_add=True)
 
+
     class Meta:
         unique_together = ('habit', 'step', 'step_order')
 
 class UserProgress(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     habit = models.ForeignKey(Habit, on_delete=models.CASCADE)
-    step = models.ForeignKey(Step, on_delete=models.CASCADE)
-    progress_status = models.CharField(max_length=15, default='not started', choices=[
-        ('not started', 'Not Started'),
-        ('in progress', 'In Progress'),
-        ('completed', 'Completed')
-    ])
+    current_day = models.IntegerField(default=1) 
+    completed_tasks_today = models.IntegerField(default=0)
     last_updated = models.DateTimeField(auto_now=True)
 
+    def reset_tasks_for_next_day(self):
+        self.current_day += 1
+        self.completed_tasks_today = 0
+        self.save()
+
+    def check_all_tasks_completed(self):
+   
+        steps_for_today = HabStep.objects.filter(habit=self.habit, step_order=self.current_day)
+        completed_steps = UserTask.objects.filter(
+            user_progress=self,
+            task_description__in=[step.step.description for step in steps_for_today],
+            task_completed=True
+        ).count()
+
+        if completed_steps == steps_for_today.count():
+            self.reset_tasks_for_next_day()
+
+
+    def __str__(self):
+        return f"{self.user.username} - {self.habit.habit_name} - Day {self.current_day}"
+
     class Meta:
-        unique_together = ('user', 'habit', 'step')
+        unique_together = ('user', 'habit')
+
+class UserTask(models.Model):
+    user_progress = models.ForeignKey(UserProgress, on_delete=models.CASCADE)
+    task_completed = models.BooleanField(default=False)
+    task_description = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    def __str__(self):
+        return f"Task for {self.user_progress.user.username} - Day {self.user_progress.current_day}"
+

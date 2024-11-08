@@ -37,5 +37,14 @@ class Command(BaseCommand):
 
     def handle(self, *args, **kwargs):
         # Call the function with parameters
-        self.add_foreign_keys(constant_key=1, second_key_start=64, second_key_end=147)
+        self.add_foreign_keys(constant_key=21, second_key_start=260, second_key_end=343)
+        self.add_foreign_keys(constant_key=22, second_key_start=344, second_key_end=427)
+        self.add_foreign_keys(constant_key=23, second_key_start=428, second_key_end=508)
+        self.add_foreign_keys(constant_key=24, second_key_start=509, second_key_end=571)
+        self.add_foreign_keys(constant_key=25, second_key_start=572, second_key_end=634)
+        self.add_foreign_keys(constant_key=26, second_key_start=635, second_key_end=718)
+        self.add_foreign_keys(constant_key=27, second_key_start=719, second_key_end=802)
+        self.add_foreign_keys(constant_key=28, second_key_start=803, second_key_end=886)
+        self.add_foreign_keys(constant_key=29, second_key_start=887, second_key_end=949)
+        self.add_foreign_keys(constant_key=30, second_key_start=950, second_key_end=1012)
 

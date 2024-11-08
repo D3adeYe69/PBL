@@ -19,13 +19,15 @@ from django.urls import path
 from . import views
 from django.conf import settings
 from django.conf.urls.static import static
+from .views import assign_steps_to_habit
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('',views.index),
     path('sign-up', views.sign_up, name = 'sign-up'),
     path('habits', views.habits, name = 'habits'),
-    path('habit/<int:id>/', views.habit )
+    path('habit/<int:id>/', views.habit ),
+    path('assign-steps/', assign_steps_to_habit, name='assign_steps')
     
 ]
 
