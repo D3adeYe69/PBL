@@ -27,7 +27,13 @@ urlpatterns = [
     path('sign-up', views.sign_up, name = 'sign-up'),
     path('habits', views.habits, name = 'habits'),
      path('habit/<int:id>/', views.habit, name='habit'),
-    path('assign-steps/', assign_steps_to_habit, name='assign_steps')
+    path('assign-steps/', assign_steps_to_habit, name='assign_steps'),
+    path('settings', views.settings, name="settings"),
+    path('problem', views.problem, name="problem"),
+    path('notifications', views.notifications, name="notifications"),
+    path('account', views.account, name="account"),
+    path('support', views.support, name="support"),
+
     
 ]
 

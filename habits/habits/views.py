@@ -71,7 +71,7 @@ def habit(request, id):
    
     current_time = timezone.now()
     print(current_time.hour+2)
-    if current_time.hour+2 == 24 and current_time.minute == 25:
+    if current_time.hour+2 == 24 and current_time.minute == 0:
         user_progress.check_all_tasks_completed() 
 
     if request.method == 'POST':
@@ -120,3 +120,33 @@ def assign_steps_to_habit(request):
         step = get_object_or_404(Step, step_id=step_id)
         HabStep.objects.create(habit=habit, step=step, step_order=step_id)
     return HttpResponse(f'Successfully assigned steps {start_step_id} to {end_step_id} to habit "{habit.habit_name}".')
+
+def settings(request):
+    user_id = request.session.get('user_id')
+    if not user_id:
+        return redirect('login')
+    return render(request, 'settings.html',{"user_id": user_id})
+
+def problem(request):
+    user_id = request.session.get('user_id')
+    if not user_id:
+        return redirect('login')
+    return render(request, 'problem.html',{"user_id": user_id})
+
+def notifications(request):
+    user_id = request.session.get('user_id')
+    if not user_id:
+        return redirect('login')
+    return render(request, 'notifications.html',{"user_id": user_id})
+
+def account(request):
+    user_id = request.session.get('user_id')
+    if not user_id:
+        return redirect('login')
+    return render(request, 'account.html',{"user_id": user_id})
+
+def support(request):
+    user_id = request.session.get('user_id')
+    if not user_id:
+        return redirect('login')
+    return render(request, 'support.html',{"user_id": user_id})

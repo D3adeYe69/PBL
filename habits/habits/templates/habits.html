@@ -62,21 +62,21 @@
       </div>
       <div class="navbar flex items-center py-3 justify-around bg-white w-full fixed bottom-0 shadow-lg rounded-t-xl">
 
-        <a  href="" class="item flex flex-col items-center justify-center">
+        <a  href="{% url 'habits' %}" class="item flex flex-col items-center justify-center">
           <div class="img"><img src="{% static '/images/home.svg' %}" alt=""></div>
           <div class="text-item text-opacity-75">Home</div>
         </a>
-        <a href="" class="block item flex flex-col items-center justify-center">
+        <a href="{% url 'notifications' %}" class="block item flex flex-col items-center justify-center">
 
           <div class="img"><img src="{% static '/images/account.svg' %}" alt=""></div>
           <div class="text-item text-opacity-75">Notifications</div>
         </a>
-        <a href="" class="block item flex flex-col items-center justify-center">
+        <a href="{% url 'settings' %}" class="block item flex flex-col items-center justify-center">
 
           <div class="img"><img src="{% static '/images/settings.svg' %}" alt=""></div>
           <div class="text-item text-opacity-75">Settings</div>
 
-        <a href="" class="block item flex flex-col items-center justify-center">
+        <a href="{% url 'account' %}" class="block item flex flex-col items-center justify-center">
           <div class="img"><img src="{% static '/images/notifications.svg' %}" alt=""></div>
           <div class="text-item text-opacity-75">Account</div></a>
 
