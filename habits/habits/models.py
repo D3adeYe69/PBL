@@ -104,4 +104,6 @@ class UserTask(models.Model):
     
     def __str__(self):
         return f"Task for {self.user_progress.user.username} - Day {self.user_progress.current_day}"
+    
+    
 

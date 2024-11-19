@@ -4,23 +4,31 @@
 {% load static %}
 <div class="screen bg-gradient-to-t from-pink-300 to-white h-screen flex gap-6
  flex-col items-center p-10 justify-start px-16">
-             <div class="back-image text-4xl w-full flex items-center justify-between gap-8">
-                <a href="{% url 'habits' %}">
-                    <img class="w-3" src="{% static '/images/back.png' %}" alt="back-button" />
-                </a>
-                <div class="title text-[#c22165] text-4xl font-bold ">Notifications</div>
-                <div class=""></div>
-            </div>
- 
- <div class="buttons flex flex-col items-center justify-center w-full gap-4 ">
-    <div class="but flex flex-row items-center  w-full border-b border-gray-200 py-3">
-        <a class="text-[#C22165] text-2xl font-bold flex-1" href="{% url 'habits' %}">Show notifications</a>
-        <a href="{% url 'habits' %}"class="" ><img src="{% static '/images/settings-access.svg' %}" alt=""></a>
+    <div class="back-image text-4xl w-full flex items-center justify-between gap-8">
+        <a href="{% url 'habits' %}">
+            <img class="w-3" src="{% static '/images/back.png' %}" alt="back-button" />
+        </a>
+        <div class="title text-[#c22165] text-4xl font-bold">Notifications</div>
+        <div class=""></div>
     </div>
-        <div class="but flex flex-row items-center  w-full border-b border-gray-200 py-3">
-        <a class="text-[#C22165] text-2xl font-bold flex-1" href="{% url 'habits' %}">Weekly summary</a>
-        <a href="{% url 'habits' %}"class="" ><img src="{% static '/images/settings-access.svg' %}" alt=""></a>
- </div>
-</div>
 
+    <div class="buttons flex flex-col items-center justify-center w-full gap-4">
+        <!-- Show Notifications -->
+        <div class="but flex flex-row items-center w-full border-b border-gray-200 py-3">
+            <span class="text-[#C22165] text-2xl font-bold flex-1">Show notifications</span>
+            <label class="relative inline-flex items-center cursor-pointer">
+                <input type="checkbox" value="" class="sr-only peer">
+                <div class="w-11 h-6 bg-gray-200 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#C22165]"></div>
+            </label>
+        </div>
+        <!-- Weekly Summary -->
+        <div class="but flex flex-row items-center w-full border-b border-gray-200 py-3">
+            <span class="text-[#C22165] text-2xl font-bold flex-1">Weekly summary</span>
+            <label class="relative inline-flex items-center cursor-pointer">
+                <input type="checkbox" value="" class="sr-only peer">
+                <div class="w-11 h-6 bg-gray-200 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#C22165]"></div>
+            </label>
+        </div>
+    </div>
+</div>
 {% endblock content %}

@@ -33,6 +33,7 @@ urlpatterns = [
     path('notifications', views.notifications, name="notifications"),
     path('account', views.account, name="account"),
     path('support', views.support, name="support"),
+    path('api/delete-account', views.delete_account, name='delete_account'),
 
     
 ]

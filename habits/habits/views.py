@@ -9,6 +9,7 @@ from django.shortcuts import get_object_or_404
 from .models import Habit, Step, HabStep,UserTask,UserProgress
 from datetime import *
 from django.utils import timezone
+from django.http import JsonResponse
 
 def index(request):
     context = {}
@@ -35,15 +36,19 @@ def sign_up(request):
         form = UserRegistrationForm(request.POST)
         if form.is_valid():
             user = form.save()
+            # Create initial progress for each habit
             for habit in Habit.objects.all():
-                for day in range(1, 2):
-                    for task in Step.objects.filter(...):
-                        UserProgress.objects.create(user=user, habit=habit, step=task, curent_day=day)
+                # Just create progress for day 1 initially
+                UserProgress.objects.create(
+                    user=user,
+                    habit=habit,
+                    current_day=1,
+                    completed_tasks_today=0
+                )
             return redirect('/')
     else:
         form = UserRegistrationForm()
     return render(request, 'sign-up.html', {'form': form})
-
 def habits(request):
     habits = Habit.objects.all().values()
     return render(request, 'habits.html', {'habits': habits})
@@ -143,10 +148,47 @@ def account(request):
     user_id = request.session.get('user_id')
     if not user_id:
         return redirect('login')
-    return render(request, 'account.html',{"user_id": user_id})
+    
+    # Add the deletion handling
+    if request.method == 'POST':
+        try:
+            user = get_object_or_404(User, user_id=user_id)
+            user.delete()
+            # Clear session
+            request.session.flush()
+            return redirect('/')
+        except Exception as e:
+            return render(request, 'account.html', {
+                "user_id": user_id,
+                "error_message": "Failed to delete account. Please try again."
+            })
+            
+    return render(request, 'account.html', {"user_id": user_id})
 
 def support(request):
     user_id = request.session.get('user_id')
     if not user_id:
         return redirect('login')
     return render(request, 'support.html',{"user_id": user_id})
+
+
+
+def delete_account(request):
+    if request.method == 'POST':
+        user_id = request.session.get('user_id')
+        if not user_id:
+            return JsonResponse({'error': 'Not logged in'}, status=401)
+        
+        try:
+            user = User.objects.get(user_id=user_id)
+            # Delete all related data (Django will handle this automatically due to on_delete=CASCADE)
+            user.delete()
+            # Clear the session
+            request.session.flush()
+            return JsonResponse({'message': 'Account deleted successfully'})
+        except User.DoesNotExist:
+            return JsonResponse({'error': 'User not found'}, status=404)
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=500)
+    
+    return JsonResponse({'error': 'Method not allowed'}, status=405)
