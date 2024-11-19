@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block title %}Setting Up Your Profile{% endblock %}
+{% block content %}
+{% load static %}
+<div class="screen bg-gradient-to-t from-pink-300 to-white min-h-screen flex flex-col items-center p-10 gap-8">
+
+    <!-- Header -->
+    <div class="back-image text-4xl w-full flex items-center justify-between gap-8">
+        <a href="{% url 'help_center' %}">
+            <img class="w-3" src="{% static '/images/back.png' %}" alt="back-button" />
+        </a>
+        <div class="title text-[#c22165] text-4xl font-bold">Setting Up Your Profile</div>
+        <div></div>
+    </div>
+
+    <!-- Add Profile Photo Section -->
+    <div class="border w-full p-6 rounded-lg shadow-md bg-white">
+        <div class="text-[#c22165] text-2xl font-bold mb-4">Adding a Profile Photo</div>
+        <ol class="list-decimal pl-6 text-gray-700 text-lg">
+            <li>Tap User Information.</li>
+            <li>Tap Edit data.</li>
+            <li>Tap Change photo.</li>
+            <li>Select Upload photo from your device.</li>
+            <li>Crop your selected photo then tap Save.</li>            
+        </ol>
+    </div>
+
+    <!-- Change Email Section -->
+    <div class="border w-full p-6 rounded-lg shadow-md bg-white">
+        <div class="text-[#c22165] text-2xl font-bold mb-4">Changing Your Email</div>
+        <ol class="list-decimal pl-6 text-gray-700 text-lg">
+            <li>Tap User Information.</li>
+            <li>Tap Edit data.</li>
+            <li>Tap Change email.</li>
+            <li>Enter new email.</li>
+            <li>Tap Save.</li>
+        </ol>
+    </div>
+
+</div>
+{% endblock content %}

@@ -2,9 +2,9 @@
 {% block title %}Facing a problem?{% endblock %}
 {% block content %}
 {% load static %}
-<div class="screen bg-gradient-to-t from-pink-300 to-white h-screen flex gap-10 flex-col items-center p-10 justify-start px-14">
+<div class="screen bg-gradient-to-t from-pink-300 to-white min-h-screen flex gap-10 flex-col items-center p-10 justify-start px-14">
               <div class="back-image text-4xl w-full flex items-center justify-between gap-8">
-                <a href="{% url 'habits' %}">
+                <a href="{% url 'settings' %}">
                     <img class="w-3" src="{% static '/images/back.png' %}" alt="back-button" />
                 </a>
                 <div class="title text-[#c22165] text-4xl font-bold ">Facing a problem ?</div>

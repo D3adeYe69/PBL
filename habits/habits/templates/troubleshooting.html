@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block title %}Troubleshooting{% endblock %}
+{% block content %}
+{% load static %}
+<div class="screen bg-gradient-to-t from-pink-300 to-white min-h-screen flex flex-col items-center p-10 gap-8">
+
+    <!-- Header -->
+    <div class="back-image text-4xl w-full flex items-center justify-between gap-8">
+        <a href="{% url 'help_center' %}">
+            <img class="w-3" src="{% static '/images/back.png' %}" alt="back-button" />
+        </a>
+        <div class="title text-[#c22165] text-4xl font-bold">Troubleshooting</div>
+        <div></div>
+    </div>
+
+    <!-- Troubleshooting Steps Border Section -->
+    <div class="border w-full p-6 rounded-lg shadow-md bg-white">
+        <div class="text-gray-700 text-lg leading-relaxed">
+            <p class="text-[#c22165] text-2xl font-bold mb-4">If you are experiencing problems with our app, try working through these steps:</p>
+
+            <div class="mb-6">
+                <p class="text-xl font-bold text-[#C22165]">Latest version</p>
+                <p>Make sure your device is running the latest version of the HabitQuest app.</p>
+            </div>
+
+            <div class="mb-6">
+                <p class="text-xl font-bold text-[#C22165]">Restart the app and your device</p>
+                <p>As a first step, we recommend restarting the app and device. This can often resolve issues or free up storage resources.</p>
+            </div>
+
+            <div class="mb-6">
+                <p class="text-xl font-bold text-[#C22165]">Check your internet connection</p>
+                <p>Weak data or Wi-Fi signal can also impact your experience.</p>
+            </div>
+
+            <div class="mb-6">
+                <p class="text-xl font-bold text-[#C22165]">Clear app storage</p>
+                <p>Try clearing your app cache. This removes temporary files that may be causing issues.</p>
+            </div>
+        </div>
+    </div>
+
+</div>
+{% endblock content %}

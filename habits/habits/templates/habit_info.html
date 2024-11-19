@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block title %}History{% endblock %}
+{% block content %}
+{% load static %}
+
+<!-- Background Color and Overall Styling -->
+<div class="screen bg-gradient-to-t from-pink-300 to-white min-h-screen flex flex-col items-center justify-start p-10 px-16 gap-6">
+
+    <!-- Top Left Element with Back Button -->
+    <div class="back-image text-4xl w-full flex items-center justify-between">
+        <div class="">
+            <a href="/habit/{{habit.habit_id}}">{{habit_info}}
+                <img class="w-3" src="{% static '/images/back.png' %}" alt="back-button" />
+            </a>
+        </div>
+        <div class="title text-[#c22165] text-4xl font-bold">
+            History
+        </div>
+        <div></div>
+    </div>
+
+    <!-- "Summary" Title Section (below History) -->
+    <div class="summary text-[#c22165] text-2xl font-semibold mt-12">
+        Summary
+    </div>
+
+    <!-- Horizontal line under "Summary" -->
+    <div class="border-t border-gray-300 w-full my-4"></div>
+
+    <!-- Stats Section (Days Active and Steps Completed) -->
+    <div class="flex flex-col items-center justify-center mt-6 gap-4">
+
+        <!-- Days Active -->
+        <div class="text-xl font-semibold text-gray-700">
+            Days Active
+        </div>
+        <!-- Days Active Value -->
+        <div class="text-3xl font-bold text-orange-500">
+            {{ days_active }}
+        </div>
+
+        <!-- Horizontal line between the stats -->
+        <div class="border-t border-gray-300 w-full my-4"></div>
+
+        <!-- Steps Completed -->
+        <div class="text-xl font-semibold text-gray-700">
+            Steps Completed
+        </div>
+        <!-- Steps Completed Value -->
+        <div class="text-3xl font-bold text-blue-500">
+            {{ total_steps }}
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock content %}

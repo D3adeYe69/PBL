@@ -23,17 +23,25 @@ from .views import assign_steps_to_habit
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('',views.index),
+    path('', views.index, name = 'log-in'),
     path('sign-up', views.sign_up, name = 'sign-up'),
+    path('reset_pass', views.reset_pass, name = 'reset_pass'),
     path('habits', views.habits, name = 'habits'),
      path('habit/<int:id>/', views.habit, name='habit'),
+     path('habit/<int:id>/info', views.habit_info, name='habit_info'),
     path('assign-steps/', assign_steps_to_habit, name='assign_steps'),
     path('settings', views.settings, name="settings"),
     path('problem', views.problem, name="problem"),
     path('notifications', views.notifications, name="notifications"),
     path('account', views.account, name="account"),
     path('support', views.support, name="support"),
+    path('help_center', views.help_center, name="help_center"),
+    path('profile_setup', views.profile_setup, name='profile_setup'),
+    path('edit_password', views.edit_password, name='edit_password'),
+    path('troubleshooting', views.troubleshooting, name='troubleshooting'),
+    # path('report/problem', views.report_problem, name='report_problem'),
     path('api/delete-account', views.delete_account, name='delete_account'),
+
 
     
 ]

@@ -53,6 +53,10 @@ def habits(request):
     habits = Habit.objects.all().values()
     return render(request, 'habits.html', {'habits': habits})
 
+########################################################################################################################################################################
+#needs changes
+def reset_pass(request):
+    return render(request, 'reset_pass.html')
 
 def habit(request, id):
     user_id = request.session.get('user_id')
@@ -171,6 +175,30 @@ def support(request):
         return redirect('login')
     return render(request, 'support.html',{"user_id": user_id})
 
+def help_center(request):
+    user_id = request.session.get('user_id')
+    if not user_id:
+        return redirect('login')
+    return render(request, 'help_center.html',{"user_id": user_id})
+
+def profile_setup(request):
+    user_id = request.session.get('user_id')
+    if not user_id:
+        return redirect('login')
+    return render(request, 'profile_setup.html',{"user_id": user_id})
+
+def edit_password(request):
+    user_id = request.session.get('user_id')
+    if not user_id:
+        return redirect('login')
+    return render(request, 'edit_password.html',{"user_id": user_id})
+
+def troubleshooting(request):
+    user_id = request.session.get('user_id')
+    if not user_id:
+        return redirect('login')
+    return render(request, 'troubleshooting.html',{"user_id": user_id})
+
 
 
 def delete_account(request):
@@ -192,3 +220,38 @@ def delete_account(request):
             return JsonResponse({'error': str(e)}, status=500)
     
     return JsonResponse({'error': 'Method not allowed'}, status=405)
+
+def habit_info(request, id):
+    # Get user from session
+    user_id = request.session.get('user_id')
+    if not user_id:
+        return redirect('login')
+    
+    user = get_object_or_404(User, user_id=user_id)
+    
+    # Get the specified habit
+    habit = get_object_or_404(Habit, habit_id=id)
+    
+    # Retrieve or create user progress for the habit
+    user_progress = UserProgress.objects.filter(user=user, habit=habit).first()
+    if not user_progress:
+        user_progress = UserProgress.objects.create(
+            user=user,
+            habit=habit,
+            current_day=0,
+            completed_tasks_today=0,
+            days_active=0,
+            total_steps=0
+        )
+    
+    # Example logic for active days and steps
+    days_active = 8008
+    total_steps = 80085
+
+    # Render the page with calculated stats
+    return render(request, "habit_info.html", {
+        "user_progress": user_progress,
+        "days_active": days_active,
+        "total_steps": total_steps,
+        "habit": habit  # Ensure habit object is passed here
+    })

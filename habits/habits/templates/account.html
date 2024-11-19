@@ -3,7 +3,7 @@
 {% block content %}
 {% load static %}
 
-<div class="screen bg-gradient-to-t from-pink-300 to-white h-screen flex gap-6 flex-col items-center p-10 justify-start px-16">
+<div class="screen bg-gradient-to-t from-pink-300 to-white min-h-screen flex gap-6 flex-col items-center p-10 justify-start px-16">
     <div class="back-image text-4xl w-full flex items-center justify-between gap-8">
         <div class="">
             <a href="{% url 'habits' %}">
@@ -26,6 +26,10 @@
         <div class="but flex flex-row items-center w-full border-b border-gray-200 py-3">
             <a class="text-[#C22165] text-2xl font-bold flex-1" href="{% url 'habits' %}">Download your data</a>
             <a href="{% url 'habits' %}" class="flex-"><img src="{% static '/images/settings-access.svg' %}" alt=""></a>
+        </div>
+        <div class="but flex flex-row items-center w-full border-b border-gray-200 py-3">
+            <a class="text-[#C22165] text-2xl font-bold flex-1" href="/">Log out</a>
+            <a href="/" class="flex-"><img src="{% static '/images/settings-access.svg' %}" alt=""></a>
         </div>
         <div class="but flex flex-row items-center w-full border-b border-gray-200 py-3">
             <button onclick="openDeleteModal()" class="text-[#C22165] text-2xl font-bold flex-1 text-left">Delete account</button>
