@@ -90,3 +90,30 @@ Ensured that user progress is saved in the database, allowing for accurate track
 Database Completion:
 Fully populated the database with all required information for complete functionality, and made some changes to make it compatible with the front-end and be able to use it dynamically
 💬 Comment: Completing the database population finalized the project’s backend, ensuring all habits and steps were available for tracking, making the app ready for real-world use.
+
+🗓️ (November 16, 2024)
+Frontend updates:
+Updated the front-end.
+💬 Comment: Updating the front-end  ensured a polished user interface, ready for backend integration and testing.
+![Account.html (User page)](/images/image11.png)
+![Settings page](/images/image12.png)
+![Support page](/images/image13.png)
+
+🗓️ (November 19, 2024)
+Feature Enhancements:
+Created the Habit History page, Forgot Password page, and most Habit Creation pages (Front-end only).
+💬 Comment: Adding these pages expanded the app's functionality by enabling users to recover accounts, review their progress, and set up new habits more efficiently.
+![Page for informations how to edit the password](/images/image14.png)
+![Page for statistics](/images/image15.png)
+
+User Account Management:
+Added the front sliding notification and implemented account deletion.
+💬 Comment: These features improved user experience by providing dynamic feedback and allowing users to manage their accounts effectively.
+![Some debugging in the index function](/images/image16.png)
+![Delete account function in views.py](/images/image17.png)
+
+🗓️ (November 22, 2024)
+Password Reset Implementation:
+Made changes to the reset password functionality using the user's email.
+💬 Comment: Updating the reset password feature ensured a secure and user-friendly process for recovering accounts.
+![Few changes in the front end logic of this page](/images/image18.png)
