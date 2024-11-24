@@ -89,6 +89,22 @@ DATABASES = {
     }
 }
 
+# Email configuration (you already have this)
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 465
+EMAIL_USE_SSL = True
+EMAIL_HOST_USER = 'killer1x4@gmail.com'
+EMAIL_HOST_PASSWORD = 'woew arwu adxq jqxf'
+DEFAULT_FROM_EMAIL = 'killer1x4@gmail.com'
+
+# Add these settings
+SITE_ID = 1
+PASSWORD_RESET_TIMEOUT = 14400  # 4 hours in seconds
+
+# Add your domain
+ALLOWED_HOSTS = ['localhost', '127.0.0.1']  # Add your domain here
+
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators

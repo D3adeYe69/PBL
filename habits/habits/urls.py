@@ -20,15 +20,22 @@ from . import views
 from django.conf import settings
 from django.conf.urls.static import static
 from .views import assign_steps_to_habit
+from django.contrib.auth import views as auth_views
+from .views import (
+    ResetPasswordView, 
+    ResetPasswordConfirmView,
+    password_reset_sent,
+    password_reset_complete
+)
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.index, name = 'log-in'),
     path('sign-up', views.sign_up, name = 'sign-up'),
-    path('reset_pass', views.reset_pass, name = 'reset_pass'),
     path('habits', views.habits, name = 'habits'),
-     path('habit/<int:id>/', views.habit, name='habit'),
-     path('habit/<int:id>/info', views.habit_info, name='habit_info'),
+    path('habit/<int:id>/', views.habit, name='habit'),
+    path('habit/<int:id>/info', views.habit_info, name='habit_info'),
     path('assign-steps/', assign_steps_to_habit, name='assign_steps'),
     path('settings', views.settings, name="settings"),
     path('problem', views.problem, name="problem"),
@@ -41,9 +48,11 @@ urlpatterns = [
     path('troubleshooting', views.troubleshooting, name='troubleshooting'),
     # path('report/problem', views.report_problem, name='report_problem'),
     path('api/delete-account', views.delete_account, name='delete_account'),
-
-
     
+   path('reset_password/', ResetPasswordView.as_view(), name='reset_password'),
+    path('password_reset_sent/', password_reset_sent, name='password_reset_sent'),
+    path('reset/<str:uidb64>/<str:token>/', ResetPasswordConfirmView.as_view(), name='password_reset_confirm'),
+    path('password_reset_complete/', password_reset_complete, name='password_reset_complete'),
 ]
 
 if settings.DEBUG:

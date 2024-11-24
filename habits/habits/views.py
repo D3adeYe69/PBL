@@ -53,10 +53,7 @@ def habits(request):
     habits = Habit.objects.all().values()
     return render(request, 'habits.html', {'habits': habits})
 
-########################################################################################################################################################################
-#needs changes
-def reset_pass(request):
-    return render(request, 'reset_pass.html')
+
 
 def habit(request, id):
     user_id = request.session.get('user_id')
@@ -255,3 +252,108 @@ def habit_info(request, id):
         "total_steps": total_steps,
         "habit": habit  # Ensure habit object is passed here
     })
+    
+from django.shortcuts import render, redirect
+from django.core.mail import send_mail
+from django.template.loader import render_to_string
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.utils.encoding import force_bytes, force_str
+from django.contrib.sites.shortcuts import get_current_site
+from .models import User
+from .tokens import password_reset_token
+from django.views import View
+
+class ResetPasswordView(View):
+    def get(self, request):
+        return render(request, 'reset_password.html')
+    
+    def post(self, request):
+        email = request.POST.get('email')
+        if not email:
+            return render(request, 'reset_pass.html', {'error': 'Please provide an email'})
+            
+        user = User.objects.filter(email=email).first()
+        if user:
+            current_site = get_current_site(request)
+            subject = 'Password Reset Request'
+            
+            # Create reset token
+            uid = urlsafe_base64_encode(force_bytes(user.user_id))
+            token = password_reset_token.make_token(user)
+            
+            # Create email content
+            email_context = {
+                'user': user,
+                'domain': current_site.domain,
+                'uid': uid,
+                'token': token,
+                'protocol': 'https' if request.is_secure() else 'http'
+            }
+            
+            email_body = render_to_string('password_reset_email.html', email_context)
+            
+            # Send email
+            try:
+                send_mail(
+                    subject,
+                    email_body,
+                    'killer1x4@gmail.com',
+                    [user.email],
+                    fail_silently=False,
+                )
+                print(f"Password reset email sent to {email}")
+                return redirect('password_reset_sent')
+            except Exception as e:
+                print(f"Error sending email: {str(e)}")
+                return render(request, 'reset_pass.html', {'error': 'Error sending email'})
+        
+        return redirect('password_reset_sent')  # Redirect even if email not found for security
+
+class ResetPasswordConfirmView(View):
+    def get(self, request, uidb64, token):
+        try:
+            user_id = force_str(urlsafe_base64_decode(uidb64))
+            user = User.objects.get(user_id=user_id)
+            
+            if password_reset_token.check_token(user, token):
+                return render(request, 'password_reset_form.html', {
+                    'uidb64': uidb64,
+                    'token': token
+                })
+            else:
+                return render(request, 'password_reset_form.html', {'error': 'Invalid token'})
+                
+        except (TypeError, ValueError, OverflowError, User.DoesNotExist):
+            return render(request, 'password_reset_form.html', {'error': 'Invalid reset link'})
+    
+    def post(self, request, uidb64, token):
+        try:
+            user_id = force_str(urlsafe_base64_decode(uidb64))
+            user = User.objects.get(user_id=user_id)
+            
+            if password_reset_token.check_token(user, token):
+                password = request.POST.get('new_password1')
+                confirm_password = request.POST.get('new_password2')
+                
+                if password == confirm_password:
+                    from django.contrib.auth.hashers import make_password
+                    user.password = make_password(password)
+                    user.save()
+                    return redirect('password_reset_complete')
+                else:
+                    return render(request, 'password_reset_form.html', {
+                        'error': 'Passwords do not match',
+                        'uidb64': uidb64,
+                        'token': token
+                    })
+            
+            return render(request, 'password_reset_form.html', {'error': 'Invalid token'})
+            
+        except (TypeError, ValueError, OverflowError, User.DoesNotExist):
+            return render(request, 'password_reset_form.html', {'error': 'Invalid reset link'})
+
+def password_reset_sent(request):
+    return render(request, 'password_reset_sent.html')
+
+def password_reset_complete(request):
+    return render(request, 'password_reset_done.html') 
