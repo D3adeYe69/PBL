@@ -297,7 +297,7 @@ class ResetPasswordView(View):
                 send_mail(
                     subject,
                     email_body,
-                    'killer1x4@gmail.com',
+                    'djangoproject31@gmail.com',
                     [user.email],
                     fail_silently=False,
                 )
