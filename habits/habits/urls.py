@@ -53,7 +53,11 @@ urlpatterns = [
     path('password_reset_sent/', password_reset_sent, name='password_reset_sent'),
     path('reset/<str:uidb64>/<str:token>/', ResetPasswordConfirmView.as_view(), name='password_reset_confirm'),
     path('password_reset_complete/', password_reset_complete, name='password_reset_complete'),
+    
+    path('habit/<int:habit_id>/info/', views.habit_info, name='habit_info'),
+    path('habit/<int:habit_id>/step/<int:step_id>/complete/', views.complete_step, name='complete_step'),
 ]
+
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

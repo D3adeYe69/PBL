@@ -95,17 +95,20 @@
     <div class="tasks mt-6 gap-2 flex flex-col items-center justify-center mx-4">
         {% for hab_step in steps_for_today %}
         <div class="task bg-white rounded-2xl flex justify-between px-8 py-5 items-center w-full text-[#716e74] text-[18px]" style="font-family: Jost">
-            <form method="POST" action="">
-                {% csrf_token %}
-                <input type="checkbox" name="step_{{ hab_step.id }}" id="task-checkbox{{ forloop.counter }}" class="custom-checkbox"
-                    {% for task in user_progress.usertask_set.all %}
-                        {% if task.task_description == hab_step.step.description %}
-                            {% if task.task_completed %} checked {% endif %}
-                        {% endif %}
-                    {% endfor %} />
-
-                <label for="task-checkbox{{ forloop.counter }}" class="custom-label cursor-pointer">{{ hab_step.step.description }}</label>
-            </form>
+            <div class="task-container">
+                <input type="checkbox" 
+                       name="step_{{ hab_step.step.step_id }}" 
+                       id="task-checkbox{{ forloop.counter }}" 
+                       class="custom-checkbox"
+                       {% for task in user_progress.usertask_set.all %}
+                           {% if task.task_description == hab_step.step.description %}
+                               {% if task.task_completed %} checked {% endif %}
+                           {% endif %}
+                       {% endfor %} />
+                <label for="task-checkbox{{ forloop.counter }}" class="custom-label cursor-pointer">
+                    {{ hab_step.step.description }}
+                </label>
+            </div>
         </div>
         {% empty %}
         <div class="task bg-white rounded-2xl flex justify-between px-8 py-5 items-center w-full text-[#716e74] text-[18px]" style="font-family: Jost">
@@ -115,15 +118,64 @@
     </div>
 
 </div>
-<script>
-    document.querySelectorAll('.custom-checkbox').forEach(function (checkbox) {
-        checkbox.addEventListener('change', function () {
-            var form = this.closest('form');
 
-            if (!this.checked) {
-                this.value = "off";
+<script>
+    // Helper function to get CSRF token
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
             }
-            form.submit();
+        }
+        return cookieValue;
+    }
+
+    // Function to handle step completion
+    function completeStep(habitId, stepId, checkbox) {
+        fetch(`/habit/${habitId}/step/${stepId}/complete/`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': getCookie('csrftoken'),
+            },
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Success! The checkbox state is already updated
+                console.log('Step completion updated successfully');
+            } else {
+                // If the request failed, revert the checkbox state
+                checkbox.checked = !checkbox.checked;
+                console.error('Failed to update step completion');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            // Revert the checkbox state on error
+            checkbox.checked = !checkbox.checked;
+        });
+    }
+
+    // Add event listeners to all checkboxes
+    document.querySelectorAll('.custom-checkbox').forEach(function(checkbox) {
+        checkbox.addEventListener('change', function(e) {
+            // Prevent default form submission
+            e.preventDefault();
+            
+            // Get the habit ID from the current page context
+            const habitId = "{{ habit.habit_id }}";
+            
+            // Extract step ID from the checkbox name (format: step_[stepId])
+            const stepId = this.name.split('_')[1];
+            
+            // Call the complete step function
+            completeStep(habitId, stepId, this);
         });
     });
 </script>

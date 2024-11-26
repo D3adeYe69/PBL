@@ -92,6 +92,37 @@ class UserProgress(models.Model):
 
     def __str__(self):
         return f"{self.user.username} - {self.habit.habit_name} - Day {self.current_day}"
+    
+    def get_days_active(self):
+        """Returns the number of unique days where tasks were completed""" 
+        return UserTask.objects.filter(
+            user_progress=self,
+            task_completed=True
+        ).dates('created_at', 'day').count()
+
+    def get_total_steps_completed(self):
+        """Returns the total number of completed tasks"""
+        return UserTask.objects.filter(
+            user_progress=self,
+            task_completed=True
+        ).count()
+
+    def get_completion_history(self):
+        """Returns a dictionary of dates and number of tasks completed"""
+        history = {}
+        completed_tasks = UserTask.objects.filter(
+            user_progress=self,
+            task_completed=True
+        ).order_by('created_at')
+        
+        for task in completed_tasks:
+            date = task.created_at.date()
+            if date in history:
+                history[date] += 1
+            else:
+                history[date] = 1
+        
+        return history
 
     class Meta:
         unique_together = ('user', 'habit')
@@ -104,6 +135,11 @@ class UserTask(models.Model):
     
     def __str__(self):
         return f"Task for {self.user_progress.user.username} - Day {self.user_progress.current_day}"
+    
+    
+    
+    
+    
     
     
 

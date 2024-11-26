@@ -10,6 +10,7 @@ from .models import Habit, Step, HabStep,UserTask,UserProgress
 from datetime import *
 from django.utils import timezone
 from django.http import JsonResponse
+from django.views.decorators.http import require_POST
 
 def index(request):
     context = {}
@@ -225,33 +226,60 @@ def habit_info(request, id):
         return redirect('login')
     
     user = get_object_or_404(User, user_id=user_id)
-    
-    # Get the specified habit
     habit = get_object_or_404(Habit, habit_id=id)
     
-    # Retrieve or create user progress for the habit
+    # Get or create user progress
     user_progress = UserProgress.objects.filter(user=user, habit=habit).first()
     if not user_progress:
         user_progress = UserProgress.objects.create(
             user=user,
             habit=habit,
-            current_day=0,
-            completed_tasks_today=0,
-            days_active=0,
-            total_steps=0
+            current_day=1,
+            completed_tasks_today=0
         )
     
-    # Example logic for active days and steps
-    days_active = 8008
-    total_steps = 80085
+    # Calculate statistics
+    days_active = user_progress.get_days_active()
+    total_steps = user_progress.get_total_steps_completed()
+    completion_history = user_progress.get_completion_history()
+    
+    context = {
+        'habit': habit,
+        'habit_info': habit.habit_name,
+        'days_active': days_active,
+        'total_steps': total_steps,
+        'completion_history': completion_history,
+        'user_progress': user_progress,
+    }
+    
+    return render(request, 'habit_info.html', context)
 
-    # Render the page with calculated stats
-    return render(request, "habit_info.html", {
-        "user_progress": user_progress,
-        "days_active": days_active,
-        "total_steps": total_steps,
-        "habit": habit  # Ensure habit object is passed here
-    })
+@require_POST
+def complete_step(request, habit_id, step_id):
+    user_id = request.session.get('user_id')
+    if not user_id:
+        return JsonResponse({'success': False, 'error': 'Not logged in'}, status=401)
+    
+    try:
+        user = User.objects.get(user_id=user_id)
+        habit = Habit.objects.get(habit_id=habit_id)
+        step = Step.objects.get(step_id=step_id)
+        
+        user_progress = UserProgress.objects.get(user=user, habit=habit)
+        
+        user_task, created = UserTask.objects.get_or_create(
+            user_progress=user_progress,
+            task_description=step.description,
+            defaults={'task_completed': True}
+        )
+        
+        if not created:
+            user_task.task_completed = not user_task.task_completed  # Toggle completion
+            user_task.save()
+        
+        return JsonResponse({'success': True})
+    except (User.DoesNotExist, Habit.DoesNotExist, Step.DoesNotExist, UserProgress.DoesNotExist):
+        return JsonResponse({'success': False, 'error': 'Invalid request'}, status=400)
     
 from django.shortcuts import render, redirect
 from django.core.mail import send_mail
@@ -357,3 +385,7 @@ def password_reset_sent(request):
 
 def password_reset_complete(request):
     return render(request, 'password_reset_done.html') 
+
+    
+    
+    

@@ -4,10 +4,10 @@
 {% load static %}
 <div class="screen bg-gradient-to-t from-pink-300 to-white min-h-screen flex gap-6 flex-col items-center p-10 justify-start px-16">
     <div class="back-image text-4xl w-full flex items-center justify-between gap-8">
-        <a href="{% url 'support' %}">
+        <a href="{% url 'settings' %}">
             <img class="w-3" src="{% static '/images/back.png' %}" alt="back-button" />
         </a>
-        <div class="title text-[#c22165] text-4xl font-bold">Help Centre</div>
+        <div class="title text-[#c22165] text-4xl font-bold">Help Center</div>
         <div class=""></div>
     </div>
     <div class="buttons flex flex-col items-center justify-center w-full gap-4 ">
@@ -31,17 +31,6 @@
                 <img src="{% static '/images/settings-access.svg' %}" alt="access icon" />
             </a>
         </div>
-
-        <!-- Report a problem -->
-        <div class="but flex flex-row items-center w-full border-b border-gray-200 py-3">
-            <a class="text-[#C22165] text-2xl font-bold flex-1" href="{% url 'habits' %}">Report a problem</a>
-            <a href="{% url 'habits' %}" class="flex-"><!-- report_problem -->
-                <img src="{% static '/images/settings-access.svg' %}" alt="access icon" />
-            </a>
-        </div>
-        
     </div>
 </div>
 {% endblock content %}
-
-
