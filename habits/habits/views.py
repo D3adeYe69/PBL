@@ -404,4 +404,137 @@ def password_reset_complete(request):
 
     
     
+from django.http import HttpResponse
+from reportlab.lib import colors
+from reportlab.lib.pagesizes import letter
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle
+from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+from io import BytesIO
+from datetime import datetime
+from .models import User, UserProgress, UserTask, Habit
+
+def download_history_pdf(request):
+    user_id = request.session.get('user_id')
+    if not user_id:
+        return redirect('index')
     
+    try:
+        # Get user and their habits
+        user = User.objects.get(user_id=user_id)
+        user_progress_list = UserProgress.objects.filter(user=user)
+        
+        # Create PDF buffer
+        buffer = BytesIO()
+        doc = SimpleDocTemplate(
+            buffer,
+            pagesize=letter,
+            title="Your Habits History"
+        )
+        
+        # PDF Styles
+        styles = getSampleStyleSheet()
+        title_style = ParagraphStyle(
+            'CustomTitle',
+            parent=styles['Heading1'],
+            fontSize=24,
+            spaceAfter=30,
+            textColor=colors.HexColor('#c22165'),
+            alignment=1  # Center alignment
+        )
+        
+        habit_style = ParagraphStyle(
+            'HabitTitle',
+            parent=styles['Heading2'],
+            fontSize=18,
+            textColor=colors.HexColor('#333333'),
+            spaceBefore=20,
+            spaceAfter=10
+        )
+
+        # Create custom style for wrapped text
+        cell_style = ParagraphStyle(
+            'CellStyle',
+            parent=styles['Normal'],
+            fontSize=10,
+            leading=12,  # Line spacing
+            spaceBefore=6,
+            spaceAfter=6,
+            wordWrap='CJK'  # Enable word wrapping
+        )
+        
+        # PDF Elements
+        elements = []
+        
+        # Add main title
+        elements.append(Paragraph("Your Habits History", title_style))
+        elements.append(Spacer(1, 30))
+        
+        # For each habit
+        for progress in user_progress_list:
+            # Add habit title
+            elements.append(Paragraph(progress.habit.habit_name, habit_style))
+            
+            # Get completed tasks for this habit
+            completed_tasks = UserTask.objects.filter(
+                user_progress=progress,
+                task_completed=True
+            ).order_by('-created_at')
+            
+            if completed_tasks.exists():
+                # Create table data
+                data = [['Step Completed', 'Date']]  # Header row
+                for task in completed_tasks:
+                    # Create paragraph objects for both columns
+                    wrapped_description = Paragraph(task.task_description, cell_style)
+                    date_text = Paragraph(task.created_at.strftime('%B %d, %Y'), cell_style)
+                    data.append([wrapped_description, date_text])
+                
+                # Create and style table with adjusted dimensions
+                table = Table(data, colWidths=[350, 150], rowHeights=None)
+                table.setStyle(TableStyle([
+                    # Header style
+                    ('BACKGROUND', (0, 0), (-1, 0), colors.HexColor('#FEC6EE')),
+                    ('TEXTCOLOR', (0, 0), (-1, 0), colors.HexColor('#333333')),
+                    ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
+                    ('FONTSIZE', (0, 0), (-1, 0), 12),
+                    
+                    # Content style
+                    ('BACKGROUND', (0, 1), (-1, -1), colors.white),
+                    ('TEXTCOLOR', (0, 1), (-1, -1), colors.black),
+                    ('FONTNAME', (0, 1), (-1, -1), 'Helvetica'),
+                    ('FONTSIZE', (0, 1), (-1, -1), 10),
+                    
+                    # Alignment and spacing
+                    ('ALIGN', (0, 0), (-1, -1), 'LEFT'),
+                    ('VALIGN', (0, 0), (-1, -1), 'TOP'),  # Important for text wrapping
+                    ('LEFTPADDING', (0, 0), (-1, -1), 12),
+                    ('RIGHTPADDING', (0, 0), (-1, -1), 12),
+                    ('TOPPADDING', (0, 0), (-1, -1), 8),
+                    ('BOTTOMPADDING', (0, 0), (-1, -1), 8),
+                    
+                    # Grid style
+                    ('GRID', (0, 0), (-1, -1), 1, colors.HexColor('#FEC6EE')),
+                ]))
+                
+                elements.append(table)
+            else:
+                elements.append(
+                    Paragraph("No steps completed yet for this habit", styles['Normal'])
+                )
+            
+            elements.append(Spacer(1, 20))
+        
+        # Build PDF
+        doc.build(elements)
+        
+        # Create response
+        buffer.seek(0)
+        response = HttpResponse(content_type='application/pdf')
+        response['Content-Disposition'] = f'attachment; filename="habits_history_{datetime.now().strftime("%Y%m%d")}.pdf"'
+        response.write(buffer.getvalue())
+        
+        return response
+        
+    except Exception as e:
+        print(f"Error generating PDF: {e}")
+        return redirect('index')

@@ -49,11 +49,11 @@ urlpatterns = [
     # path('report/problem', views.report_problem, name='report_problem'),
     path('api/delete-account', views.delete_account, name='delete_account'),
     
-   path('reset_password/', ResetPasswordView.as_view(), name='reset_password'),
+    path('reset_password/', ResetPasswordView.as_view(), name='reset_password'),
     path('password_reset_sent/', password_reset_sent, name='password_reset_sent'),
     path('reset/<str:uidb64>/<str:token>/', ResetPasswordConfirmView.as_view(), name='password_reset_confirm'),
     path('password_reset_complete/', password_reset_complete, name='password_reset_complete'),
-    
+    path('download-history/', views.download_history_pdf, name='download_history'),
     path('habit/<int:habit_id>/info/', views.habit_info, name='habit_info'),
     path('habit/<int:habit_id>/step/<int:step_id>/complete/', views.complete_step, name='complete_step'),
 ]

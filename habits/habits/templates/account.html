@@ -24,8 +24,13 @@
             <a href="{% url 'habits' %}" class="flex-"><img src="{% static '/images/settings-access.svg' %}" alt=""></a>
         </div>
         <div class="but flex flex-row items-center w-full border-b border-gray-200 py-3">
-            <a class="text-[#C22165] text-2xl font-bold flex-1" href="{% url 'habits' %}">Download your data</a>
-            <a href="{% url 'habits' %}" class="flex-"><img src="{% static '/images/settings-access.svg' %}" alt=""></a>
+            <a href="{% url 'download_history' %}" 
+               class="text-[#C22165] text-2xl font-bold flex-1 hover:text-[#e92577] transition-colors">
+                Download your data
+            </a>
+            <a href="{% url 'download_history' %}" class="flex-">
+                <img src="{% static '/images/settings-access.svg' %}" alt="">
+            </a>
         </div>
         <div class="but flex flex-row items-center w-full border-b border-gray-200 py-3">
             <a class="text-[#C22165] text-2xl font-bold flex-1" href="/">Log out</a>
