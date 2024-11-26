@@ -220,7 +220,6 @@ def delete_account(request):
     return JsonResponse({'error': 'Method not allowed'}, status=405)
 
 def habit_info(request, id):
-    # Get user from session
     user_id = request.session.get('user_id')
     if not user_id:
         return redirect('login')
@@ -228,7 +227,6 @@ def habit_info(request, id):
     user = get_object_or_404(User, user_id=user_id)
     habit = get_object_or_404(Habit, habit_id=id)
     
-    # Get or create user progress
     user_progress = UserProgress.objects.filter(user=user, habit=habit).first()
     if not user_progress:
         user_progress = UserProgress.objects.create(
@@ -238,21 +236,30 @@ def habit_info(request, id):
             completed_tasks_today=0
         )
     
-    # Calculate statistics
-    days_active = user_progress.get_days_active()
-    total_steps = user_progress.get_total_steps_completed()
-    completion_history = user_progress.get_completion_history()
+    # Get all completed tasks for this habit
+    completed_tasks = UserTask.objects.filter(
+        user_progress=user_progress,
+        task_completed=True
+    ).order_by('-created_at')  # Most recent first
+    
+    # Debug prints
+    print("Completed tasks:", completed_tasks.count())
+    print("Task dates:", [task.created_at.date() for task in completed_tasks])
+    
+    days_active = completed_tasks.dates('created_at', 'day').distinct().count()
+    print("Days active:", days_active)
     
     context = {
         'habit': habit,
         'habit_info': habit.habit_name,
         'days_active': days_active,
-        'total_steps': total_steps,
-        'completion_history': completion_history,
+        'total_steps': completed_tasks.count(),
         'user_progress': user_progress,
+        'completed_tasks': completed_tasks,
     }
     
     return render(request, 'habit_info.html', context)
+
 
 @require_POST
 def complete_step(request, habit_id, step_id):
@@ -263,22 +270,31 @@ def complete_step(request, habit_id, step_id):
     try:
         user = User.objects.get(user_id=user_id)
         habit = Habit.objects.get(habit_id=habit_id)
-        step = Step.objects.get(step_id=step_id)
+        step = HabStep.objects.get(step=step_id, habit=habit)
         
         user_progress = UserProgress.objects.get(user=user, habit=habit)
         
+        # Debug print
+        print(f"Creating/updating task for user {user.username}, habit {habit.habit_name}, step {step.step.description}")
+        
         user_task, created = UserTask.objects.get_or_create(
             user_progress=user_progress,
-            task_description=step.description,
-            defaults={'task_completed': True}
+            task_description=step.step.description,
+            defaults={
+                'task_completed': True,
+                'created_at': timezone.now()  # Make sure we're setting the date
+            }
         )
         
         if not created:
-            user_task.task_completed = not user_task.task_completed  # Toggle completion
+            user_task.task_completed = not user_task.task_completed
             user_task.save()
+            
+        print(f"Task {'created' if created else 'updated'} - completed: {user_task.task_completed}")
         
         return JsonResponse({'success': True})
-    except (User.DoesNotExist, Habit.DoesNotExist, Step.DoesNotExist, UserProgress.DoesNotExist):
+    except Exception as e:
+        print(f"Error in complete_step: {str(e)}")
         return JsonResponse({'success': False, 'error': 'Invalid request'}, status=400)
     
 from django.shortcuts import render, redirect
@@ -325,7 +341,7 @@ class ResetPasswordView(View):
                 send_mail(
                     subject,
                     email_body,
-                    'djangoproject31@gmail.com',
+                    'h4bitquest@gmail.com',
                     [user.email],
                     fail_silently=False,
                 )

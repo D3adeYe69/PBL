@@ -27,7 +27,7 @@
     </div>
 
     <!-- "Summary" Title Section -->
-    <div class="summary text-[#c22165] text-2xl font-semibold mt-12">
+    <div class="summary text-[#c22165] text-2xl font-semibold mt-12 text-center w-full">
         Summary
     </div>
 
@@ -57,6 +57,34 @@
             <div class="text-4xl font-bold text-blue-500 mt-2">
                 {{ total_steps }}
             </div>
+        </div>
+    </div>
+
+    <!-- Completed Steps Section -->
+    <div class="w-full mt-12 flex flex-col items-center">
+        <div class="text-[#c22165] text-2xl font-semibold mb-4 text-center">
+            Completed Steps
+        </div>
+        <div class="border-t border-gray-300 w-full mb-4"></div>
+        
+        <div class="completed-steps-container flex flex-col gap-3 w-full">
+            {% for task in completed_tasks %}
+            <div class="completed-step bg-white rounded-xl p-4 shadow-sm">
+                <div class="flex justify-between items-center">
+                    <div class="flex items-center gap-3">
+                        <div class="w-2 h-2 rounded-full bg-green-500"></div>
+                        <span class="text-gray-700">{{ task.task_description }}</span>
+                    </div>
+                    <div class="text-sm text-gray-500">
+                        {{ task.created_at|date:"M d, Y" }}
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="text-center text-gray-500 py-4">
+                No steps completed yet
+            </div>
+            {% endfor %}
         </div>
     </div>
 </div>

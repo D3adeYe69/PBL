@@ -94,11 +94,16 @@ class UserProgress(models.Model):
         return f"{self.user.username} - {self.habit.habit_name} - Day {self.current_day}"
     
     def get_days_active(self):
-        """Returns the number of unique days where tasks were completed""" 
+        """Returns the number of unique days where tasks were completed"""
+        from django.db.models import Count
+        from django.db.models.functions import TruncDate
+    
         return UserTask.objects.filter(
-            user_progress=self,
-            task_completed=True
-        ).dates('created_at', 'day').count()
+          user_progress=self,
+         task_completed=True
+     ).annotate(
+            date=TruncDate('created_at')
+     ).values('date').distinct().count()
 
     def get_total_steps_completed(self):
         """Returns the total number of completed tasks"""
