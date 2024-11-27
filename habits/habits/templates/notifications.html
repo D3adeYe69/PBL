@@ -1,34 +1,375 @@
-{% extends "base.html" %}
-{% block title %}Notifications{% endblock %}
-{% block content %}
-{% load static %}
-<div class="screen bg-gradient-to-t from-pink-300 to-white min-h-screen flex gap-6
- flex-col items-center p-10 justify-start px-16">
-    <div class="back-image text-4xl w-full flex items-center justify-between gap-8">
-        <a href="{% url 'habits' %}">
-            <img class="w-3" src="{% static '/images/back.png' %}" alt="back-button" />
-        </a>
-        <div class="title text-[#c22165] text-4xl font-bold">Notifications</div>
-        <div class=""></div>
+    {% extends "base.html" %}
+    {% block title %}Notifications{% endblock %}
+    {% block content %}
+    {% load static %}
+
+    <div class="screen bg-gradient-to-t from-pink-300 to-white min-h-screen flex gap-6 flex-col items-center p-10 justify-start px-16">
+        <div class="back-image text-4xl w-full flex items-center justify-between gap-8">
+            <a href="{% url 'habits' %}">
+                <img class="w-3" src="{% static '/images/back.png' %}" alt="back-button" />
+            </a>
+            <div class="title text-[#c22165] text-4xl font-bold">Notifications</div>
+            <div class=""></div>
+        </div>
+
+        <div class="buttons flex flex-col items-center justify-center w-full gap-4">
+            <!-- Show Notifications -->
+            <div class="but flex flex-row items-center w-full border-b border-gray-200 py-3">
+                <span class="text-[#C22165] text-2xl font-bold flex-1">Show notifications</span>
+                <label class="relative inline-flex items-center cursor-pointer">
+                    <input type="checkbox" id="showNotifications" class="sr-only peer" {% if show_notifications %}checked{% endif %}>
+                    <div class="w-11 h-6 bg-gray-200 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#C22165]"></div>
+                </label>
+            </div>
+            <!-- Weekly Summary -->
+            <div class="but flex flex-row items-center w-full border-b border-gray-200 py-3">
+                <span class="text-[#C22165] text-2xl font-bold flex-1">Weekly summary</span>
+                <label class="relative inline-flex items-center cursor-pointer">
+                    <input type="checkbox" id="weeklySummary" class="sr-only peer" {% if weekly_summary %}checked{% endif %}>
+                    <div class="w-11 h-6 bg-gray-200 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#C22165]"></div>
+                </label>
+            </div>
+        </div>
     </div>
 
-    <div class="buttons flex flex-col items-center justify-center w-full gap-4">
-        <!-- Show Notifications -->
-        <div class="but flex flex-row items-center w-full border-b border-gray-200 py-3">
-            <span class="text-[#C22165] text-2xl font-bold flex-1">Show notifications</span>
-            <label class="relative inline-flex items-center cursor-pointer">
-                <input type="checkbox" value="" class="sr-only peer">
-                <div class="w-11 h-6 bg-gray-200 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#C22165]"></div>
-            </label>
-        </div>
-        <!-- Weekly Summary -->
-        <div class="but flex flex-row items-center w-full border-b border-gray-200 py-3">
-            <span class="text-[#C22165] text-2xl font-bold flex-1">Weekly summary</span>
-            <label class="relative inline-flex items-center cursor-pointer">
-                <input type="checkbox" value="" class="sr-only peer">
-                <div class="w-11 h-6 bg-gray-200 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#C22165]"></div>
-            </label>
-        </div>
-    </div>
-</div>
-{% endblock content %}
+    <script>
+        let notificationCount = 0;
+        let notificationInterval = null;
+
+        // Function to show HabitQuest notification
+        function showHabitQuestNotification(title, body) {
+            console.log('Attempting to show notification:', title, body);
+            
+            if (Notification.permission === 'granted') {
+                console.log('Permission is granted, creating notification');
+                
+                try {
+                    const notification = new Notification(title, {
+                        body: body,
+                        icon: '{% static "images/notification-icon.png" %}',
+                        badge: '{% static "images/notification-icon.png" %}',
+                        tag: 'habitquest-reminder'
+                    });
+                    
+                    notification.onclick = function() {
+                        console.log('Notification clicked');
+                        window.focus();
+                        notification.close();
+                    };
+                    
+                    console.log('Notification created successfully');
+                    logNotification(title, body);
+                    return true;
+                } catch (error) {
+                    console.error('Error creating notification:', error);
+                    return false;
+                }
+            } else {
+                console.log('Notification permission not granted:', Notification.permission);
+                return false;
+            }
+        }
+
+        // Function to send reminder notification
+        function sendReminderNotification() {
+            console.log('Sending reminder notification');
+            const messages = [
+                "Time to check your habits! 🎯",
+                "Don't forget your goals today! 💪",
+                "Keep up the great work with your habits! ⭐",
+                "Your habits are waiting for you! 📝",
+                "Time for a quick habit check! ✨"
+            ];
+            const randomMessage = messages[Math.floor(Math.random() * messages.length)];
+            showHabitQuestNotification("HabitQuest", randomMessage);
+        }
+
+        // Function to start periodic notifications
+        function startPeriodicNotifications() {
+            console.log('Starting periodic notifications');
+            
+            if (notificationInterval) {
+                console.log('Clearing existing interval');
+                clearInterval(notificationInterval);
+            }
+            
+            // Send initial notification immediately
+            console.log('Sending welcome notification');
+            showHabitQuestNotification(
+                "HabitQuest",
+                "Welcome to HabitQuest! You will receive reminders to check your habits."
+            );
+            
+            // Set up interval (10 seconds for testing)
+            const intervalTime = 5 * 1000; // 10 seconds
+            console.log('Setting up interval for', intervalTime, 'milliseconds');
+            
+            notificationInterval = setInterval(() => {
+                console.log('Interval triggered');
+                if (document.getElementById('showNotifications').checked) {
+                    console.log('Notifications are enabled, sending reminder');
+                    sendReminderNotification();
+                } else {
+                    console.log('Notifications are disabled');
+                }
+            }, intervalTime);
+        }
+
+        // Function to stop periodic notifications
+        function stopPeriodicNotifications() {
+            console.log('Stopping periodic notifications');
+            if (notificationInterval) {
+                clearInterval(notificationInterval);
+                notificationInterval = null;
+            }
+        }
+
+        // Function to request notification permission
+        async function requestNotificationPermission() {
+            console.log('Requesting notification permission');
+            try {
+                const permission = await Notification.requestPermission();
+                console.log('Permission result:', permission);
+                return permission === 'granted';
+            } catch (error) {
+                console.error('Error requesting permission:', error);
+                return false;
+            }
+        }
+
+        // Handle show notifications toggle
+        document.getElementById('showNotifications').addEventListener('change', async (e) => {
+            console.log('Notification toggle changed:', e.target.checked);
+            
+            if (e.target.checked) {
+                const permissionGranted = await requestNotificationPermission();
+                console.log('Permission granted:', permissionGranted);
+                
+                if (!permissionGranted) {
+                    console.log('Permission denied, unchecking toggle');
+                    e.target.checked = false;
+                    return;
+                }
+                console.log('Starting notifications');
+                startPeriodicNotifications();
+            } else {
+                console.log('Stopping notifications');
+                stopPeriodicNotifications();
+            }
+            
+            await updateNotificationSetting('show_notifications', e.target.checked);
+        });
+
+        function logNotification(title, body) {
+            console.log(`Notification logged: ${title} - ${body}`);
+            notificationCount++;
+            updateNotificationStatus();
+        }
+
+        function updateNotificationStatus() {
+            const statusDiv = document.createElement('div');
+            statusDiv.className = 'fixed bottom-4 right-4 bg-[#C22165] text-white p-4 rounded-lg shadow-lg notification-status';
+            statusDiv.textContent = `Notifications sent: ${notificationCount}`;
+            
+            const existingStatus = document.querySelector('.notification-status');
+            if (existingStatus) {
+                existingStatus.remove();
+            }
+            
+            document.body.appendChild(statusDiv);
+        }
+
+        async function updateNotificationSetting(type, enabled) {
+            try {
+                const response = await fetch('{% url "update_notification_settings" %}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ type, enabled })
+                });
+                return response.ok;
+            } catch (error) {
+                console.error('Error updating notification settings:', error);
+                return false;
+            }
+        }
+
+        // Handle weekly summary toggle
+        document.getElementById('weeklySummary').addEventListener('change', async (e) => {
+            await updateNotificationSetting('weekly_summary', e.target.checked);
+        });
+
+        // Check initial permission state when page loads
+        window.addEventListener('load', () => {
+            console.log('Page loaded, current notification permission:', Notification.permission);
+            
+            // If notifications are enabled but permission is not granted, uncheck the toggle
+            const showNotificationsCheckbox = document.getElementById('showNotifications');
+            if (showNotificationsCheckbox.checked && Notification.permission !== 'granted') {
+                console.log('Notifications enabled but permission not granted, unchecking toggle');
+                showNotificationsCheckbox.checked = false;
+            }
+            
+            // If notifications are enabled and permission is granted, start the notifications
+            if (showNotificationsCheckbox.checked && Notification.permission === 'granted') {
+                console.log('Notifications enabled and permission granted, starting notifications');
+                startPeriodicNotifications();
+            }
+        });
+    </script>
+    {% endblock content %}<script>
+        // Service Worker code as a string
+        const serviceWorkerCode = `
+            let notificationInterval = null;
+            
+            self.addEventListener('install', (event) => {
+                self.skipWaiting();
+            });
+
+            self.addEventListener('activate', (event) => {
+                event.waitUntil(self.clients.claim());
+            });
+
+            self.addEventListener('message', (event) => {
+                if (event.data.type === 'START_NOTIFICATIONS') {
+                    startNotificationInterval();
+                } else if (event.data.type === 'STOP_NOTIFICATIONS') {
+                    stopNotificationInterval();
+                }
+            });
+
+            function showNotification(message) {
+                self.registration.showNotification('HabitQuest', {
+                    body: message,
+                    icon: '/static/images/notification-icon.png',
+                    badge: '/static/images/notification-icon.png',
+                    tag: 'habitquest-reminder'
+                });
+            }
+
+            function startNotificationInterval() {
+                if (notificationInterval) {
+                    clearInterval(notificationInterval);
+                }
+
+                showNotification("Welcome to HabitQuest! You will receive reminders to check your habits.");
+
+                notificationInterval = setInterval(() => {
+                    const messages = [
+                        "Time to check your habits! ╰(*°▽°*)╯",
+                        "Don't forget your goals today! (～￣▽￣)～",
+                        "Keep up the great work with your habits! O(∩_∩)O",
+                        "Your habits are waiting for you! ( •̀ ω •́ )✧",
+                        "Time for a quick habit check! (✿◡‿◡)"
+                    ];
+                    const randomMessage = messages[Math.floor(Math.random() * messages.length)];
+                    showNotification(randomMessage);
+                }, 3600000); // 1 hour interval - adjust as needed
+            }
+
+            function stopNotificationInterval() {
+                if (notificationInterval) {
+                    clearInterval(notificationInterval);
+                    notificationInterval = null;
+                }
+            }
+        `;
+
+        let serviceWorkerRegistration = null;
+
+        // Function to register service worker
+        async function registerServiceWorker() {
+            if ('serviceWorker' in navigator) {
+                try {
+                    const blob = new Blob([serviceWorkerCode], { type: 'text/javascript' });
+                    const serviceWorkerUrl = URL.createObjectURL(blob);
+                    serviceWorkerRegistration = await navigator.serviceWorker.register(serviceWorkerUrl);
+                    URL.revokeObjectURL(serviceWorkerUrl);
+                    return true;
+                } catch (error) {
+                    console.error('Service Worker registration failed:', error);
+                    return false;
+                }
+            }
+            return false;
+        }
+
+        // Function to start notifications via service worker
+        function startNotifications() {
+            if (serviceWorkerRegistration && serviceWorkerRegistration.active) {
+                serviceWorkerRegistration.active.postMessage({ type: 'START_NOTIFICATIONS' });
+            }
+        }
+
+        // Function to stop notifications via service worker
+        function stopNotifications() {
+            if (serviceWorkerRegistration && serviceWorkerRegistration.active) {
+                serviceWorkerRegistration.active.postMessage({ type: 'STOP_NOTIFICATIONS' });
+            }
+        }
+
+        // Handle notification toggle
+        document.getElementById('showNotifications').addEventListener('change', async (e) => {
+            if (e.target.checked) {
+                if (Notification.permission !== 'granted') {
+                    const permission = await Notification.requestPermission();
+                    if (permission !== 'granted') {
+                        e.target.checked = false;
+                        return;
+                    }
+                }
+
+                // Register service worker if not already registered
+                if (!serviceWorkerRegistration) {
+                    const registered = await registerServiceWorker();
+                    if (!registered) {
+                        e.target.checked = false;
+                        return;
+                    }
+                }
+
+                startNotifications();
+            } else {
+                stopNotifications();
+            }
+
+            await updateNotificationSetting('show_notifications', e.target.checked);
+        });
+
+        // Keep your existing updateNotificationSetting function
+        async function updateNotificationSetting(type, enabled) {
+            try {
+                const response = await fetch('{% url "update_notification_settings" %}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ type, enabled })
+                });
+                return response.ok;
+            } catch (error) {
+                console.error('Error updating notification settings:', error);
+                return false;
+            }
+        }
+
+        // Initialize on page load
+        window.addEventListener('load', async () => {
+            const showNotificationsCheckbox = document.getElementById('showNotifications');
+            
+            if (showNotificationsCheckbox.checked) {
+                if (Notification.permission === 'granted') {
+                    await registerServiceWorker();
+                    startNotifications();
+                } else {
+                    showNotificationsCheckbox.checked = false;
+                }
+            }
+        });
+
+        // Handle weekly summary toggle
+        document.getElementById('weeklySummary').addEventListener('change', async (e) => {
+            await updateNotificationSetting('weekly_summary', e.target.checked);
+        });
+    </script>

@@ -144,7 +144,29 @@ class UserTask(models.Model):
     
     
     
+class NotificationSettings(models.Model):
+        user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='notification_settings')
+        show_notifications = models.BooleanField(default=False)
+        weekly_summary = models.BooleanField(default=False)
+        created_at = models.DateTimeField(auto_now_add=True)
+        updated_at = models.DateTimeField(auto_now=True)
+
+def __str__(self):
+        return f"Notification settings for {self.user.username}"
+
+class Meta:
+        verbose_name_plural = "Notification Settings"
+        
+        
+class NotificationLog(models.Model):
+    user = models.ForeignKey('User', on_delete=models.CASCADE)
+    title = models.CharField(max_length=255)
+    message = models.TextField()
+    sent_at = models.DateTimeField(auto_now_add=True)
+    was_clicked = models.BooleanField(default=False)
     
+    def __str__(self):
+        return f"{self.user.username} - {self.title} - {self.sent_at}"
     
     
 

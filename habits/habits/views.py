@@ -538,3 +538,137 @@ def download_history_pdf(request):
     except Exception as e:
         print(f"Error generating PDF: {e}")
         return redirect('index')
+    
+    
+    
+from django.shortcuts import render
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+from .models import NotificationSettings, User
+import json
+
+def notifications(request):
+    # Get the user from your User model
+    try:
+        user = User.objects.get(user_id=request.session.get('user_id'))
+        settings, created = NotificationSettings.objects.get_or_create(user=user)
+        
+        context = {
+            'show_notifications': settings.show_notifications,
+            'weekly_summary': settings.weekly_summary,
+        }
+    except User.DoesNotExist:
+        context = {
+            'show_notifications': False,
+            'weekly_summary': False,
+        }
+    
+    return render(request, 'notifications.html', context)
+
+@csrf_exempt
+def update_notification_settings(request):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            setting_type = data.get('type')
+            enabled = data.get('enabled')
+            
+            # Get the user from your User model
+            user = User.objects.get(user_id=request.session.get('user_id'))
+            settings, created = NotificationSettings.objects.get_or_create(user=user)
+            
+            if setting_type == 'show_notifications':
+                settings.show_notifications = enabled
+            elif setting_type == 'weekly_summary':
+                settings.weekly_summary = enabled
+            
+            settings.save()
+            
+            # Send test notification if enabling notifications
+            if setting_type == 'show_notifications' and enabled:
+                return JsonResponse({
+                    'status': 'success',
+                    'showTestNotification': True,
+                    'notificationTitle': 'Habit Tracker',
+                    'notificationBody': f'Hi {user.username}! Notifications are now enabled for your habits.'
+                })
+            
+            return JsonResponse({'status': 'success'})
+            
+        except User.DoesNotExist:
+            return JsonResponse({
+                'status': 'error',
+                'message': 'User not found'
+            }, status=404)
+        except Exception as e:
+            return JsonResponse({
+                'status': 'error',
+                'message': str(e)
+            }, status=500)
+    
+    return JsonResponse({'status': 'error', 'message': 'Invalid request'}, status=400)
+
+from django.utils import timezone
+from .models import NotificationLog
+
+def log_notification(user, title, message):
+    return NotificationLog.objects.create(
+        user=user,
+        title=title,
+        message=message
+    )
+
+from django.shortcuts import render
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+import json
+
+@csrf_exempt
+def update_notification_settings(request):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            setting_type = data.get('type')
+            enabled = data.get('enabled')
+            
+            # Get user settings
+            if setting_type == 'show_notifications':
+                return JsonResponse({
+                    'status': 'success',
+                    'showTestNotification': True,
+                    'notificationTitle': 'HabitQuest',
+                    'notificationBody': 'Welcome to HabitQuest! You will receive reminders every 4 hours to check your habits.'
+                })
+            
+            return JsonResponse({'status': 'success'})
+            
+        except Exception as e:
+            return JsonResponse({
+                'status': 'error',
+                'message': str(e)
+            }, status=500)
+    
+    return JsonResponse({'status': 'error', 'message': 'Invalid request'}, status=400)
+
+def get_notification_history(request):
+    try:
+        user = User.objects.get(user_id=request.session.get('user_id'))
+        logs = NotificationLog.objects.filter(user=user).order_by('-sent_at')
+        
+        return JsonResponse({
+            'status': 'success',
+            'notifications': [
+                {
+                    'title': log.title,
+                    'message': log.message,
+                    'sent_at': log.sent_at.strftime('%Y-%m-%d %H:%M:%S'),
+                    'was_clicked': log.was_clicked
+                }
+                for log in logs
+            ]
+        })
+    except Exception as e:
+        return JsonResponse({
+            'status': 'error',
+            'message': str(e)
+        }, status=500)

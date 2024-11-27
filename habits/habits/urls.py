@@ -56,6 +56,9 @@ urlpatterns = [
     path('download-history/', views.download_history_pdf, name='download_history'),
     path('habit/<int:habit_id>/info/', views.habit_info, name='habit_info'),
     path('habit/<int:habit_id>/step/<int:step_id>/complete/', views.complete_step, name='complete_step'),
+    
+  path('notifications/', views.notifications, name='notifications'),
+path('update-notification-settings/', views.update_notification_settings, name='update_notification_settings'),
 ]
 
 
