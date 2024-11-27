@@ -31,42 +31,57 @@ HabitQuest is a gamified habit tracking web application that helps you turn your
 * ![Django](https://img.shields.io/badge/Django-092E20?style=for-the-badge&logo=django&logoColor=white)
 * ![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)
 
-## 🚀 Getting Started
+Here's the updated **Getting Started** section in the same format as your original README:  
 
-Follow these simple steps to set up HabitQuest locally.
+---
 
-### Prerequisites
+## 🚀 Getting Started  
 
-* Python 3.x
-  ```
-  Download from python.org
-  ```
+Follow these simple steps to set up HabitQuest locally.  
 
-### Installation
+### Prerequisites  
 
-1. Clone the repository
-```bash
-git clone https://github.com/D3adeYe69/PBL.git
-cd PBL
-```
+* Python 3.x  
+  ```  
+  Download from python.org  
+  ```  
 
-2. Install Django
-```bash
-pip install django
-```
+### Installation  
 
-3. Run migrations
-```bash
-python manage.py makemigrations
-python manage.py migrate
-```
+1. Clone the repository  
+```bash  
+git clone https://github.com/D3adeYe69/PBL.git  
+cd PBL  
+```  
 
-4. Start the development server
-```bash
-python manage.py runserver
-```
+2. Install required libraries  
+```bash  
+pip install django  
+pip install python-decouple  
+pip install reportlab  
+```  
 
-5. Visit `http://127.0.0.1:8000` in your web browser to start your habit-tracking journey!
+3. Configure environment variables  
+```  
+Create a .env file in the project's root directory with the following:  
+
+DEBUG=True  
+SECRET_KEY=your_secret_key  
+ALLOWED_HOSTS=127.0.0.1,localhost  
+```  
+
+4. Run migrations  
+```bash  
+python manage.py makemigrations  
+python manage.py migrate  
+```  
+
+5. Start the development server  
+```bash  
+python manage.py runserver  
+```  
+
+6. Visit `http://127.0.0.1:8000` in your web browser to start your habit-tracking journey!  
 
 ## ✨ Features
 
