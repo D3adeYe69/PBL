@@ -42,6 +42,7 @@ urlpatterns = [
     path('notifications', views.notifications, name="notifications"),
     path('account', views.account, name="account"),
     path('change_pass', views.change_pass, name="change_pass"),
+    path('edit_info', views.change_pass, name="edit_info"),
     path('support', views.support, name="support"),
     path('help_center', views.help_center, name="help_center"),
     path('profile_setup', views.profile_setup, name='profile_setup'),

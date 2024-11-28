@@ -185,6 +185,12 @@ def change_pass(request):
         return redirect('login')
     return render(request, 'change_pass.html',{"user_id": user_id})
 
+def edit_info(request):
+    user_id = request.session.get('user_id')
+    if not user_id:
+        return redirect('login')
+    return render(request, 'edit_info.html',{"user_id": user_id})
+
 def profile_setup(request):
     user_id = request.session.get('user_id')
     if not user_id:
