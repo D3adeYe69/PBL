@@ -14,28 +14,42 @@
         <div></div>
     </div>
 
+    <!-- Display User Information -->
+    <div class="w-full bg-white border rounded-lg p-6 mb-6">
+        <h2 class="text-2xl font-bold text-[#C22165] mb-4">User Information</h2>
+        <div class="text-xl text-gray-700 mb-2">
+            <strong>Username:</strong> {{ user.username }}
+        </div>
+        <div class="text-xl text-gray-700 mb-2">
+            <strong>Email:</strong> {{ user.email }}
+        </div>
+    </div>
+
     <div class="buttons flex flex-col items-center justify-center w-full gap-4">
+        
+        <!-- Change Password Button -->
         <div class="but flex flex-row items-center w-full border-b border-gray-200 py-3">
-            <a class="text-[#C22165] text-2xl font-bold flex-1" href="{% url 'habits' %}">User information</a>
-            <a href="{% url 'habits' %}" class="flex-"><img src="{% static '/images/settings-access.svg' %}" alt=""></a>
+            <a class="text-[#C22165] text-2xl font-bold flex-1" href="{% url 'change_pass' %}">Change Password</a>
+            <a href="{% url 'change_pass' %}" class="flex-"><img src="{% static '/images/settings-access.svg' %}" alt=""></a>
         </div>
+
+        <!-- Download Data Button -->
         <div class="but flex flex-row items-center w-full border-b border-gray-200 py-3">
-            <a class="text-[#C22165] text-2xl font-bold flex-1" href="{% url 'habits' %}">Password</a>
-            <a href="{% url 'habits' %}" class="flex-"><img src="{% static '/images/settings-access.svg' %}" alt=""></a>
-        </div>
-        <div class="but flex flex-row items-center w-full border-b border-gray-200 py-3">
-            <a href="{% url 'download_history' %}" 
-               class="text-[#C22165] text-2xl font-bold flex-1 hover:text-[#e92577] transition-colors">
+            <a href="{% url 'download_history' %}" class="text-[#C22165] text-2xl font-bold flex-1 hover:text-[#e92577] transition-colors">
                 Download your data
             </a>
             <a href="{% url 'download_history' %}" class="flex-">
                 <img src="{% static '/images/settings-access.svg' %}" alt="">
             </a>
         </div>
+
+        <!-- Log out Button -->
         <div class="but flex flex-row items-center w-full border-b border-gray-200 py-3">
             <a class="text-[#C22165] text-2xl font-bold flex-1" href="/">Log out</a>
             <a href="/" class="flex-"><img src="{% static '/images/settings-access.svg' %}" alt=""></a>
         </div>
+
+        <!-- Delete Account Button -->
         <div class="but flex flex-row items-center w-full border-b border-gray-200 py-3">
             <button onclick="openDeleteModal()" class="text-[#C22165] text-2xl font-bold flex-1 text-left">Delete account</button>
             <img src="{% static '/images/settings-access.svg' %}" alt="" class="flex-">

@@ -179,6 +179,12 @@ def help_center(request):
         return redirect('login')
     return render(request, 'help_center.html',{"user_id": user_id})
 
+def change_pass(request):
+    user_id = request.session.get('user_id')
+    if not user_id:
+        return redirect('login')
+    return render(request, 'change_pass.html',{"user_id": user_id})
+
 def profile_setup(request):
     user_id = request.session.get('user_id')
     if not user_id:

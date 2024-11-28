@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+{% block title %}Change Password{% endblock %}
+{% block content %}
+{% load static %}
+
+<div class="screen bg-gradient-to-t from-pink-300 to-white min-h-screen flex flex-col items-center justify-start p-10">
+
+    <!-- Header Section with Centered Title -->
+    <div class="back-image text-4xl w-full flex items-center justify-between gap-8 mb-6">
+        <div class="">
+            <a href="{% url 'account' %}">
+                <img class="w-3" src="{% static '/images/back.png' %}" alt="back-button" />
+            </a>
+        </div>
+        <div class="title text-[#c22165] text-4xl font-bold text-center flex-1">Change Your Password</div>
+        <div></div>
+    </div>
+
+    <!-- Form Section with Input Fields -->
+    <div class="buttons flex flex-col items-center justify-center w-full max-w-md gap-4 border border-pink-400 p-6 rounded-lg shadow-lg">
+      
+      <form method="POST" class="inputs flex flex-col items-center justify-center gap-4 w-full">
+        {% csrf_token %}
+        
+        <!-- Current Password Input -->
+        <div class="input w-full">
+          <input
+            type="password"
+            name="current_password"
+            placeholder="Current Password"
+            class="bg-[#fec6ee] text-[#c22165] text-xl focus:outline-none focus:border-pink-600 focus:placeholder-transparent placeholder-[#c22165] px-5 py-2 rounded-md border border-pink-400 w-full"
+            required
+          />
+        </div>
+
+        {% if form.current_password.errors %}
+          <div class="text-red-500 text-sm mt-2">
+            {{ form.current_password.errors }}
+          </div>
+        {% endif %}
+
+        <!-- Confirm Current Password Input -->
+        <div class="input w-full">
+          <input
+            type="password"
+            name="confirm_current_password"
+            placeholder="Confirm Current Password"
+            class="bg-[#fec6ee] text-[#c22165] text-xl focus:outline-none focus:border-pink-600 focus:placeholder-transparent placeholder-[#c22165] px-5 py-2 rounded-md border border-pink-400 w-full"
+            required
+          />
+        </div>
+
+        {% if form.confirm_current_password.errors %}
+          <div class="text-red-500 text-sm mt-2">
+            {{ form.confirm_current_password.errors }}
+          </div>
+        {% endif %}
+
+        <!-- New Password Input -->
+        <div class="input w-full">
+          <input
+            type="password"
+            name="new_password"
+            placeholder="New Password"
+            class="bg-[#fec6ee] text-[#c22165] text-xl focus:outline-none focus:border-pink-600 focus:placeholder-transparent placeholder-[#c22165] px-5 py-2 rounded-md border border-pink-400 w-full"
+            required
+          />
+        </div>
+
+        {% if form.new_password.errors %}
+          <div class="text-red-500 text-sm mt-2">
+            {{ form.new_password.errors }}
+          </div>
+        {% endif %}
+
+        <!-- Submit Button -->
+        <div class="button bg-[#c22165] mt-4 inline-flex text-xl justify-center items-center px-14 py-1.5 rounded-md cursor-pointer w-full">
+          <input type="submit" value="Change Password" class="text-[#fec6ee] w-full">
+        </div>
+      </form>
+      
+      <!-- Link to Back to Settings Page -->
+      <div class="back-to-settings text-[#c22165] text-lg mt-6">
+        <a href="{% url 'account' %}" class="underline font-bold">Back to Account Settings</a>
+      </div>
+    </div>
+
+</div>
+{% endblock content %}
