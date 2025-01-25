@@ -65,8 +65,7 @@ pip install reportlab
 ```  
 Create a .env file in the project's root directory with the following:  
 
-DEBUG=True  
-SECRET_KEY=your_secret_key  
+EMAIL_HOST_PASSWORD = "aplication key from gmail"
 ALLOWED_HOSTS=127.0.0.1,localhost  
 ```  
 
