@@ -147,9 +147,14 @@ def notifications(request):
     return render(request, 'notifications.html',{"user_id": user_id})
 
 def account(request):
+    
     user_id = request.session.get('user_id')
     if not user_id:
         return redirect('login')
+    
+    current_user = get_object_or_404(User, user_id=user_id)
+    print(f"Current user: {current_user.username}, {current_user.email}")  # Debug line
+
     
     # Add the deletion handling
     if request.method == 'POST':
@@ -165,7 +170,7 @@ def account(request):
                 "error_message": "Failed to delete account. Please try again."
             })
             
-    return render(request, 'account.html', {"user_id": user_id})
+    return render(request, 'account.html', {"user": current_user})
 
 def support(request):
     user_id = request.session.get('user_id')
@@ -187,9 +192,10 @@ def change_pass(request):
 
 def edit_info(request):
     user_id = request.session.get('user_id')
-    if not user_id:
+    if not user_id: 
         return redirect('login')
-    return render(request, 'edit_info.html',{"user_id": user_id})
+    current_user = get_object_or_404(User, user_id=user_id)
+    return render(request, 'change_pass.html', {"user": current_user})
 
 def profile_setup(request):
     user_id = request.session.get('user_id')
@@ -197,11 +203,48 @@ def profile_setup(request):
         return redirect('login')
     return render(request, 'profile_setup.html',{"user_id": user_id})
 
-def edit_password(request):
+def edit_info(request):
     user_id = request.session.get('user_id')
     if not user_id:
         return redirect('login')
-    return render(request, 'edit_password.html',{"user_id": user_id})
+    
+    current_user = get_object_or_404(User, user_id=user_id)
+    
+    if request.method == 'POST':
+        if 'username_submit' in request.POST:
+            current_user.username = request.POST['username']
+            current_user.save()
+        elif 'email_submit' in request.POST:
+            current_user.email = request.POST['email']
+            current_user.save()
+        elif 'password_submit' in request.POST:
+            if check_password(request.POST['current_password'], current_user.password):
+                if request.POST['new_password'] == request.POST['confirm_password']:
+                    current_user.password = make_password(request.POST['new_password'])
+                    current_user.save()
+        return redirect('account')
+            
+    return render(request, 'change_pass.html', {'user': current_user})
+
+
+def edit_password(request):
+    if request.method == 'POST':
+        user_id = request.session.get('user_id')
+        if not user_id:
+            return redirect('login')
+        
+        user = get_object_or_404(User, user_id=user_id)
+        current_password = request.POST.get('current_password')
+        new_password = request.POST.get('new_password')
+        confirm_password = request.POST.get('confirm_password')
+        
+        if check_password(current_password, user.password):
+            if new_password == confirm_password:
+                user.password = make_password(new_password)
+                user.save()
+                return redirect('account')
+    
+    return render(request, 'edit_password.html')
 
 def troubleshooting(request):
     user_id = request.session.get('user_id')
@@ -684,3 +727,25 @@ def get_notification_history(request):
             'status': 'error',
             'message': str(e)
         }, status=500)
+
+def problem(request):
+    user_id = request.session.get('user_id')
+    if not user_id:
+        return redirect('login')
+        
+    current_user = get_object_or_404(User, user_id=user_id)
+    
+    if request.method == 'POST':
+        bug_description = request.POST.get('bug_description')
+        message = f"Bug Report from: {current_user.email}\n\n{bug_description}"
+        send_mail(
+            subject=f'Bug Report from {current_user.username}',
+            message=message,
+            from_email='h4bitquest@gmail.com',
+            recipient_list=['h4bitquest@gmail.com'],
+            fail_silently=False,
+        )
+        return redirect('habits')  # Or wherever you want to redirect after
+    return render(request, 'problem.html')
+
+        

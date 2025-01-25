@@ -40,9 +40,9 @@ urlpatterns = [
     path('settings', views.settings, name="settings"),
     path('problem', views.problem, name="problem"),
     path('notifications', views.notifications, name="notifications"),
-    path('account', views.account, name="account"),
+    path('account/', views.account, name="account"),
     path('change_pass', views.change_pass, name="change_pass"),
-    path('edit_info', views.change_pass, name="edit_info"),
+    path('edit_info', views.edit_info, name="edit_info"),
     path('support', views.support, name="support"),
     path('help_center', views.help_center, name="help_center"),
     path('profile_setup', views.profile_setup, name='profile_setup'),
@@ -59,8 +59,10 @@ urlpatterns = [
     path('habit/<int:habit_id>/info/', views.habit_info, name='habit_info'),
     path('habit/<int:habit_id>/step/<int:step_id>/complete/', views.complete_step, name='complete_step'),
     
-  path('notifications/', views.notifications, name='notifications'),
-path('update-notification-settings/', views.update_notification_settings, name='update_notification_settings'),
+    path('notifications/', views.notifications, name='notifications'),
+    path('update-notification-settings/', views.update_notification_settings, name='update_notification_settings'),
+    
+     
 ]
 
 

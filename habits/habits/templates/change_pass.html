@@ -15,91 +15,43 @@
         <div></div>
     </div>
 
-    <!-- Edit Username Section -->
-    <div class="w-full max-w-md border border-pink-400 p-6 rounded-lg shadow-lg mb-4">
-        <form method="POST" action="{% url 'account' %}" class="flex flex-col gap-4">
-            {% csrf_token %}
-            <label for="username" class="text-xl font-semibold text-[#c22165]">Username</label>
-            <input
-                type="text"
-                id="username"
-                name="username"
-                value="{{ user.username }}"
-                placeholder="Enter new username"
-                class="bg-[#fec6ee] text-[#c22165] text-xl focus:outline-none focus:border-pink-600 focus:placeholder-transparent placeholder-[#c22165] px-5 py-2 rounded-md border border-pink-400 w-full"
-                required
-            />
-            <div class="flex justify-end">
-                <button type="submit" class="text-white bg-[#c22165] py-2 px-4 rounded-full hover:bg-[#a01b52]">
-                    Save
-                </button>
+<!-- Edit Information Form -->
+<div class="w-full max-w-md border border-pink-400 p-6 rounded-lg shadow-lg mb-4">
+    <!-- Username Form -->
+    <form method="POST" action="{% url 'edit_info' %}" class="flex flex-col gap-4 mb-4">
+        {% csrf_token %}
+        <label for="username">Username</label>
+        <input type="text" id="username" name="username" value="{{ user.username }}" class="bg-[#fec6ee] text-[#c22165] text-xl px-5 py-2 rounded-md border border-pink-400 w-full" />
+        <button type="submit" name="username_submit" class="text-white bg-[#c22165] py-2 px-4 rounded-full hover:bg-[#a01b52] self-end">Save Username</button>
+    </form>
+
+    <!-- Email Form -->
+    <form method="POST" action="{% url 'edit_info' %}" class="flex flex-col gap-4 mb-4">
+        {% csrf_token %}
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" value="{{ user.email }}" class="bg-[#fec6ee] text-[#c22165] text-xl px-5 py-2 rounded-md border border-pink-400 w-full" />
+        <button type="submit" name="email_submit" class="text-white bg-[#c22165] py-2 px-4 rounded-full hover:bg-[#a01b52] self-end">Save Email</button>
+    </form>
+
+    <!-- Password Form -->
+    <form method="POST" action="{% url 'edit_info' %}" class="flex flex-col gap-4">
+        {% csrf_token %}
+        <!-- Password fields -->
+        <div class="space-y-3">
+            <div>
+                <label for="current_password">Current Password</label>
+                <input type="password" id="current_password" name="current_password" class="bg-[#fec6ee] text-[#c22165] text-xl px-5 py-2 rounded-md border border-pink-400 w-full" />
             </div>
-        </form>
-    </div>
-
-    <!-- Edit Email Section -->
-    <div class="w-full max-w-md border border-pink-400 p-6 rounded-lg shadow-lg mb-4">
-        <form method="POST" action="{% url 'account' %}" class="flex flex-col gap-4">
-            {% csrf_token %}
-            <label for="email" class="text-xl font-semibold text-[#c22165]">Email</label>
-            <input
-                type="email"
-                id="email"
-                name="email"
-                value="{{ user.email }}"
-                placeholder="Enter new email"
-                class="bg-[#fec6ee] text-[#c22165] text-xl focus:outline-none focus:border-pink-600 focus:placeholder-transparent placeholder-[#c22165] px-5 py-2 rounded-md border border-pink-400 w-full"
-                required
-            />
-            <div class="flex justify-end">
-                <button type="submit" class="text-white bg-[#c22165] py-2 px-4 rounded-full hover:bg-[#a01b52]">
-                    Save
-                </button>
+            <div>
+                <label for="new_password">New Password</label>
+                <input type="password" id="new_password" name="new_password" class="bg-[#fec6ee] text-[#c22165] text-xl px-5 py-2 rounded-md border border-pink-400 w-full" />
             </div>
-        </form>
-    </div>
-
-    <!-- Edit Password Section -->
-    <div class="w-full max-w-md border border-pink-400 p-6 rounded-lg shadow-lg mb-4">
-        <form method="POST" action="{% url 'account' %}" class="flex flex-col gap-4">
-            {% csrf_token %}
-            <label for="current_password" class="text-xl font-semibold text-[#c22165]">Current Password</label>
-            <input
-                type="password"
-                id="current_password"
-                name="current_password"
-                placeholder="Enter your current password"
-                class="bg-[#fec6ee] text-[#c22165] text-xl focus:outline-none focus:border-pink-600 focus:placeholder-transparent placeholder-[#c22165] px-5 py-2 rounded-md border border-pink-400 w-full"
-                required
-            />
-
-            <label for="new_password" class="text-xl font-semibold text-[#c22165]">New Password</label>
-            <input
-                type="password"
-                id="new_password"
-                name="new_password"
-                placeholder="Enter new password"
-                class="bg-[#fec6ee] text-[#c22165] text-xl focus:outline-none focus:border-pink-600 focus:placeholder-transparent placeholder-[#c22165] px-5 py-2 rounded-md border border-pink-400 w-full"
-                required
-            />
-
-            <label for="confirm_password" class="text-xl font-semibold text-[#c22165]">Confirm New Password</label>
-            <input
-                type="password"
-                id="confirm_password"
-                name="confirm_password"
-                placeholder="Confirm your new password"
-                class="bg-[#fec6ee] text-[#c22165] text-xl focus:outline-none focus:border-pink-600 focus:placeholder-transparent placeholder-[#c22165] px-5 py-2 rounded-md border border-pink-400 w-full"
-                required
-            />
-
-            <div class="flex justify-end">
-                <button type="submit" class="text-white bg-[#c22165] py-2 px-4 rounded-full hover:bg-[#a01b52]">
-                    Save
-                </button>
+            <div>
+                <label for="confirm_password">Confirm New Password</label>
+                <input type="password" id="confirm_password" name="confirm_password" class="bg-[#fec6ee] text-[#c22165] text-xl px-5 py-2 rounded-md border border-pink-400 w-full" />
             </div>
-        </form>
-    </div>
-
+        </div>
+        <button type="submit" name="password_submit" class="text-white bg-[#c22165] py-2 px-4 rounded-full hover:bg-[#a01b52] self-end">Save Password</button>
+    </form>
 </div>
 {% endblock content %}

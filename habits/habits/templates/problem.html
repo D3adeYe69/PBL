@@ -1,31 +1,72 @@
 {% extends "base.html" %}
-{% block title %}Facing a problem?{% endblock %}
-{% block content %}
 {% load static %}
-<div class="screen bg-gradient-to-t from-pink-300 to-white min-h-screen flex gap-10 flex-col items-center p-10 justify-start px-14">
-              <div class="back-image text-4xl w-full flex items-center justify-between gap-8">
-                <a href="{% url 'settings' %}">
-                    <img class="w-3" src="{% static '/images/back.png' %}" alt="back-button" />
-                </a>
-                <div class="title text-[#c22165] text-4xl font-bold ">Facing a problem ?</div>
-                <div class=""></div>
-            </div>
- <div class="upper-buttons flex items-center justify-center gap-7 ">
-    <div class="button bg-[#C22165] flex flex-col items-start rounded-md ">
-        <a href="{% url 'habits' %} " class="text-xl font-bold flex-1 px-4 py-2"><img src="{% static '/images/recovery.svg' %}" class="w-10 h-10 flex-1" alt=""></a>
-        <a href="{% url 'habits' %} " class="text-xl font-bold flex-1 px-4 w-40 ">Acc recovery</a>
-    </div>
-        <div class="button bg-[#C22165] flex flex-col items-start rounded-md  ">
-        <a href="{% url 'habits' %} " class="text-xl font-bold flex-1 px-4 py-2"><img src="{% static '/images/security.svg' %}" class="w-10 h-10 flex-1"  alt=""></a>
-        <a href="{% url 'habits' %} " class="text-xl font-bold flex-1 px-4 w-40">Security Alerts</a>
-    </div>
- </div>
- <div class="buttons flex flex-col items-center justify-center w-full  ">
-    <div class="but flex flex-row items-center  w-full border-b border-gray-300 py-3">
-        <a class="text-[#C22165] text-2xl font-bold flex-1" href="{% url 'support' %}">Report</a>
-        <a href="{% url 'support' %}"class="flex-" ><img src="{% static '/images/settings-access.svg' %}" alt=""></a>
-    </div>
- </div>
-</div>
 
+{% block title %}Report a Bug{% endblock %}
+
+
+{% block content %}
+<div class="screen bg-gradient-to-t from-pink-300 to-white min-h-screen flex gap-6 flex-col items-center p-10 justify-start px-16">
+    <div class="back-image text-4xl w-full flex items-center justify-between gap-8 ">
+        <div class="">
+            <a href="{% url 'settings' %}">
+                <img class="w-3" src="{% static '/images/back.png' %}" alt="back-button" />
+            </a>
+        </div>
+        <div class="title text-[#c22165] text-4xl font-bold ">Report a Problem?</div>
+        <div></div>
+    </div>
+
+   <div class="bug-report-form w-full max-w-lg mx-auto">
+       <h2 class="text-2xl font-bold text-center mb-4">Report a Bug</h2>
+       <form method="POST">
+           {% csrf_token %}
+           <textarea name="bug_description" rows="6" class="w-full p-4 border rounded-lg" placeholder="Describe the bug or issue here..."></textarea>
+           <button type="submit" class="mt-4 px-4 py-2 bg-[#C22165] text-white rounded-md w-full">Submit Bug Report</button>
+       </form>
+   </div>
+</div>
 {% endblock content %}
+
+{% block extra_js %}
+<script>
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+    function submitBugReport() {
+        const bugDetails = document.getElementById('bugDetails').value;
+
+        if (bugDetails.trim() === '') {
+            alert('Please provide bug details.');
+            return;
+        }
+
+        fetch('/report-bug/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': getCookie('csrftoken')
+            },
+            body: JSON.stringify({ 'bug_details': bugDetails })
+        })
+        .then(response => response.json())
+        .then(data => {
+            alert(data.message);
+        })
+        .catch(error => {
+            alert('Error submitting the bug report: ' + error.message);
+        });
+    }
+</script>
+{% endblock extra_js %}
