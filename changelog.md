@@ -122,15 +122,21 @@ Made changes to the reset password functionality using the user's email.
 Bug Fixes and New Features:
 Fixed some issues with the account HTML and change password HTML pages that displayed incorrect data by retrieving the admin's credentials instead of the user’s.
 💬 Comment: Corrected these issues to ensure proper display of user-specific data.
-![Account details](/images/image19.png)
+<div style="text-align: center;">
+    <img src="/images/image19.png" alt="Account details" style="max-width: 100%;"/>
+  </div>
 
 Created functionality for the 'Edit Info' part, enabling users to change their username, email, and current password.
 💬 Comment: This feature enhances user control over their account details, improving the overall user experience.
-![Edit info page](/images/image20.png)
+<div style="text-align: center;">
+    <img src="/images/image20.png" alt="Edit info page" style="max-width: 100%;"/>
+  </div>
 
 Added a 'Report a Problem' page where users can submit reports that are sent directly to our email.
 💬 Comment: This feature allows users to report issues, helping to improve the app's functionality and user support.
-![Report a problem page](/images/image21.png)
+<div style="text-align: center;">
+    <img src="/images/image21.png" alt="Report a problem page" style="max-width: 100%;"/>
+  </div>
 
 Made minor changes to page redirects for a smoother navigation experience.
 💬 Comment: These changes ensure more intuitive page transitions and user flow throughout the app.
