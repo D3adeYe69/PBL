@@ -117,3 +117,24 @@ Password Reset Implementation:
 Made changes to the reset password functionality using the user's email.
 💬 Comment: Updating the reset password feature ensured a secure and user-friendly process for recovering accounts.
 ![Few changes in the front end logic of this page](/images/image18.png)
+
+🗓️ January 25, 2025
+Bug Fixes and New Features:
+Fixed some issues with the account HTML and change password HTML pages that displayed incorrect data by retrieving the admin's credentials instead of the user’s.
+💬 Comment: Corrected these issues to ensure proper display of user-specific data.
+![Account details](/images/image19.png)
+
+Created functionality for the 'Edit Info' part, enabling users to change their username, email, and current password.
+💬 Comment: This feature enhances user control over their account details, improving the overall user experience.
+![Edit info page](/images/image20.png)
+
+Added a 'Report a Problem' page where users can submit reports that are sent directly to our email.
+💬 Comment: This feature allows users to report issues, helping to improve the app's functionality and user support.
+![Report a problem page](/images/image21.png)
+
+Made minor changes to page redirects for a smoother navigation experience.
+💬 Comment: These changes ensure more intuitive page transitions and user flow throughout the app.
+
+
+
+
